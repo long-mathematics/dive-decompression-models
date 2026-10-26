@@ -1,0 +1,72 @@
+DIVE DECOMPRESSION MODELS — MIXED LICENSE
+Copyright (c) 2026 Christopher D. Long, for original contributions
+Version: 2026-10-25
+
+This research repository is distributed under TWO standard licenses. The
+choice depends on the type of material, NOT on whether it appears in a
+particular directory.
+
+1. SOFTWARE: Apache License, Version 2.0 (SPDX: Apache-2.0)
+   https://www.apache.org/licenses/LICENSE-2.0
+
+   Covers the original Python source, scripts, software tests, workflows,
+   configuration, machine-readable synthetic examples, and related
+   software utilities in this repository, including historical Python
+   source snapshots where the repository's authors hold the rights.
+
+   Full legal text: LICENSES/Apache-2.0.txt
+
+2. SCHOLARLY AND EXPLANATORY WORKS:
+   Creative Commons Attribution 4.0 International (SPDX: CC-BY-4.0)
+   https://creativecommons.org/licenses/by/4.0/
+
+   Covers original mathematical manuscripts, proofs, explanatory prose,
+   README and documentation files, figures authored for this project,
+   and their LaTeX/Markdown source, including historical author-created
+   draft materials where the repository's authors hold the rights.
+
+   Full legal text: LICENSES/CC-BY-4.0.txt
+
+3. THIRD-PARTY AND EXTERNAL MATERIALS
+
+   Neither license changes third-party rights. Historical dive tables,
+   publisher documents, third-party figures, quoted passages, published
+   numerical data, clinical datasets, and future imported resources are
+   subject to their original rights and terms. This repository makes
+   NO CLAIM to ownership of or power to relicense third-party materials.
+
+   Small reference-value fixtures may reproduce factual numbers from
+   cited publications. The software license covers only original
+   copyrightable contributions to those fixtures to the extent any
+   such rights exist; it does NOT purport to sublicense a source table
+   or any third-party database rights.
+
+   Data placed in data/ in the future must be accompanied by explicit
+   provenance and source licensing information. The presence of such a
+   file in a public repository does not itself grant redistribution rights.
+
+4. MIXED FILES AND OVERRIDES
+
+   When a file contains third-party components or embedded software
+   samples in a manuscript, the applicable upstream or component license
+   still applies to those components. A file's explicit licensing or
+   provenance notice takes precedence over these general defaults.
+
+   Directory-by-directory assignment, and SPDX metadata for current files,
+   are recorded in REUSE.toml. Existing archival sources are retained
+   verbatim; metadata is declared externally rather than modifying them.
+
+5. RESEARCH / SAFETY DISCLAIMER
+
+   The project reconstructs mathematical models; it is NOT certified
+   dive-planning software, a dive computer, medical advice, or a
+   representation that any algorithm gives safe or acceptable DCS risk.
+   Do not use this research implementation to plan or execute dives.
+
+   The Apache-2.0 and CC-BY-4.0 licenses contain disclaimers of warranty
+   and limitations of liability. This research notice is explanatory and
+   imposes NO additional field-of-use restriction on the licensed material.
+   No license warrants software correctness or physiological validity.
+
+For questions about reuse of a particular external dataset or image, consult
+the cited original source and its explicit licensing or access conditions.
