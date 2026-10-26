@@ -44,7 +44,7 @@ $$
 \widehat S(g,j)=S(g,A)-S(N,A)+S(N,j).
 $$
 
-Of the 91 entries, **88 satisfy $S(g,j)=\widehat S(g,j)$ exactly**. The only three differences are **one minute upward**:
+Of the 91 entries, **88 satisfy $S(g,j)=\widehat S(g,j)$ exactly**. Of these 91, 25 are the anchoring entries used to construct the formula; among the remaining **66 genuine predictions, 63 are exact and three differ by one minute upward**:
 
 | Departure | Destination | Printed | Additive prediction |
 | --- | --- | ---: | ---: |
