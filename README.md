@@ -65,6 +65,12 @@ The DSAT command compares a fitted historical no-stop curve, its published table
 - No claim of a new result's priority is made without a literature review; no claimed safety or DCS-risk reduction follows from numerical correctness.
 - GitHub mathematics is written with inline `$...$` and separate-block `$$...$$`; use braces for compound subscripts. See [rendering rules](docs/RENDERING.md).
 
-## License
+## Licensing and attribution
 
-No open-source license has yet been selected. Repository visibility alone does not grant an open-source license.
+This repository uses a **permissive mixed license**. The [root license and provenance policy](LICENSE) specifies what each license covers.
+
+- **Software** (Python, tests, configuration, synthetic examples): [Apache License 2.0](LICENSES/Apache-2.0.txt), including an explicit patent grant and standard warranty disclaimer.
+- **Original mathematical papers and explanatory documentation** (Markdown, LaTeX, proofs): [Creative Commons Attribution 4.0 International](LICENSES/CC-BY-4.0.txt). Cite **Christopher D. Long**, the relevant document title, and a version or repository URL; indicate substantive modifications.
+- **Third-party published tables, quoted content, and clinical or external datasets** retain their source rights. No third-party material is relicensed merely because it is cited or appears here; follow each source's provenance and conditions.
+
+File-specific SPDX declarations are in [REUSE.toml](REUSE.toml), preserving the March 2026 archival snapshots unchanged. Neither license certifies these mathematical models or the software for real-world decompression planning.
