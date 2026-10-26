@@ -1,0 +1,267 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,array,graphicx,pdflscape,fancyhdr}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposition}
+\newcommand{\Ps}{P_{\mathrm{s}}}
+\newcommand{\M}{M_{0}}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small Spencer--Huggins reconstruction}
+\fancyhead[R]{\small Research only}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\title{A Source-Faithful Reconstruction and Numerical Audit\\of the Spencer--Huggins No-Decompression Tables}
+\author{Christopher D. Long}
+\date{26 October 2026\\\small Version 1.0: historical reconstruction and internal mathematical audit}
+\begin{document}
+\maketitle
+\begin{abstract}
+We reconstruct the six-compartment mathematical core and digitize the three operational charts in Karl E. Huggins's 1981 report, using the Spencer exposure limits as Huggins tabulated them. The reconstruction preserves published entries rather than silently replacing them with model outputs. All six calibrated surfacing limits are recovered, and 70 of 72 intermediate compartment pressures agree to the printed precision under exact half-time kinetics and decimal half-up rounding. Two substantial discrepancies are isolated. The printed first-dive chart contains seven terminal entries exceeding the rounded compartment limits. A simple inverse-kinetics candidate reproduces 169 of 179 finite residual-nitrogen-time entries; the remaining entries are recorded explicitly. All 91 printed surface-interval transitions exceed a derived compartment-envelope bound, but do not equal its minute-rounded value. We additionally give an exact rational certificate for 5,988 compartment inequalities covering 998 charted first-dive/surface-interval combinations. These results establish reproducible numerical and limited mathematical consistency, not recovery of every convention in the unpublished calculator program, nor physiological validation.
+\end{abstract}
+\begin{center}\fbox{\parbox{0.91\linewidth}{\textbf{Research only.} Neither this manuscript nor its tables or software is intended for dive planning or live dive-computer use. Numerical agreement with a historical model does not establish acceptable decompression-sickness risk. Huggins explicitly stated that these mathematically developed tables had not undergone validation testing.}}
+\end{center}
+
+\section{Sources, scope, and edition control}
+The principal source is Huggins's 1981 Michigan Sea Grant report MICHU-SG-81-205 \cite{Huggins1981}. Its printed pages 1--6 correspond to PDF pages 4--9 in the NOAA scan. Printed page 1 supplies twelve finite depth--time limits attributed to Spencer; pages 4--5 describe the model, calibration, and group percentages; pages 2--3 contain the operational charts. We reconstruct this mathematical construction, not Spencer's original experimental observations or a statistical refit of Doppler data.
+
+The supplied scan clips columns J and K of the first-dive and surface-interval charts at the page join. Huggins's own 1987 report reproduces the full chart in Appendix D, printed page 99 (PDF page 108) \cite{Huggins1987}. We use that author reproduction only to recover the clipped columns, flagging those cells separately. The resulting digital chart is therefore an explicitly documented reconstruction from two witnesses, not a claim that every character is visible in the 1981 scan. Where the 1981 scan is legible, its readings take precedence. In particular, the A/110-fsw residual-time entry is retained as 2, rather than silently replaced by 3 from a later rendering.
+
+The source PDF's SHA-256 is recorded in the fixture. The NOAA catalogue checksum agrees with the uploaded file. Raw scanned evidence, source-transcribed cells, model calculations, and inferred candidate rules are distinct objects in the accompanying files. Dashes, right arrows, and blank cells are not equated with one another or with mathematical infinity.
+
+\section{Reconstruction of the compartment calibration}
+\subsection{Pressure convention and kinetics}
+The six half-times, in minutes, are
+\[
+(h_1,\ldots,h_6)=(5,10,20,40,80,120).
+\]
+The convention recovered from the numerical tables is an air inert-gas fraction $f=0.79$ and surface absolute pressure 33 fsw, so that $\Ps=26.07$ fsw-equivalent nitrogen pressure. At gauge depth $d$, the equilibrium value is $Q(d)=\Ps+fd$. Starting at surface equilibrium, a square exposure of duration $t$ gives
+\begin{equation}
+P_i(d,t)=\Ps+fd\bigl(1-2^{-t/h_i}\bigr).
+\label{eq:kinetics}
+\end{equation}
+No water-vapor offset or timed ascent/descent has been introduced. Such changes would define a different reconstruction. Huggins displays the exponential coefficient as $0.693$; interpreting this as a rounded representation of $\log 2$ agrees with 70 printed pressures, whereas using $0.693$ literally agrees with only 49. This comparison supports the exact half-time convention but does not identify the unavailable HP-67 program's internal arithmetic.
+
+Rounding must also be specified. At 70 fsw for 40 minutes, the 20-minute compartment equals exactly $67.545$. Decimal half-up rounding gives the printed $67.55$; binary floating-point formatting can instead give $67.54$. The audit therefore uses an independent 50-digit Decimal calculation before rounding.
+
+\subsection{Calibration from the twelve supplied limits}
+Let $\mathcal E$ denote the twelve depth--time pairs in Huggins's Table 1. The stated construction is
+\begin{equation}
+\widehat M_i=\max_{(d,t)\in\mathcal E}P_i(d,t),\qquad
+M_i=\frac{\lfloor2\widehat M_i\rfloor}{2}.
+\label{eq:calibrate}
+\end{equation}
+The second step rounds downward to the nearest 0.5 fsw. Table~\ref{tab:mvalues} reproduces all six published values without fitting any free parameters.
+\begin{table}[ht]\centering
+\caption{Reconstructed column maxima and published rounded limits.}\label{tab:mvalues}
+\begin{tabular}{rrrr}\toprule
+Half-time (min)&Maximizing exposure (fsw/min)&$\widehat M_i$ (fsw)&$M_i$ (fsw)\\\midrule
+5&110/15&102.107500&102.0\\
+10&100/20&85.320000&85.0\\
+20&70/40&67.545000&67.5\\
+40&50/75&54.801236&54.5\\
+80&40/135&47.859323&47.5\\
+120&30/225&43.308742&43.0\\\bottomrule
+\end{tabular}
+\end{table}
+
+Two entries in the 72-cell intermediate pressure table disagree substantially (Table~\ref{tab:errors}); neither affects a column maximum. They are probable printed numerical errors under the recovered convention, not silently corrected source data.
+\begin{table}[ht]\centering
+\caption{Preserved discrepancies in Huggins's Table 2.}\label{tab:errors}
+\begin{tabular}{rrrrr}\toprule
+Depth&Duration&Half-time&Printed&Recomputed\\
+(fsw)&(min)&(min)&(fsw)&(fsw)\\\midrule
+35&165&40&52.41&52.14\\
+60&50&120&39.96&37.96\\\bottomrule
+\end{tabular}
+\end{table}
+
+Before rounding, $\widehat M$ is the coordinatewise least vector of compartment limits containing all supplied exposures: any vector admitting those exposures must dominate each column maximum. Downward rounding destroys that containment. Seven supplied endpoints slightly exceed at least one resulting $M_i$; the largest relative excess is approximately $0.7565\%$. Consequently, the model predicts some endpoint exceedances even though the printed limits were inputs to its calibration. This is a mathematical distinction, not a clinical conclusion.
+
+\section{Group fractions and the continuous first-crossing model}
+The group fractions stated in the report are
+\[
+\alpha_A=0.63,\;\alpha_B=0.66,\;\ldots,\;\alpha_M=0.99,\;\alpha_N=1.
+\]
+The initial normalized loading is greatest in the 120-minute compartment:
+$\Ps/43\approx0.606279$, consistent with the report's 60.63\% and its choice of 63\% for group A. This is a fraction of total compartment pressure, not of excess pressure above equilibrium.
+
+Define the continuous score $R(d,t)=\max_i P_i(d,t)/M_i$. The first crossing of a group upper boundary is
+\begin{equation}
+T_g(d)=\min_i T_{i,g}(d),\qquad
+T_{i,g}(d)=\frac{h_i}{\log2}\log\!\left(\frac{Q(d)-\Ps}{Q(d)-\alpha_gM_i}\right),
+\label{eq:crossing}
+\end{equation}
+when $\Ps<\alpha_gM_i<Q(d)$. A target at or above $Q(d)$ has infinite crossing time; the target is then never exceeded at that depth. The supplied parameters put every group target strictly above $\Ps$.
+
+Equation~\eqref{eq:crossing} follows directly by solving \eqref{eq:kinetics}. It specifies a continuous model boundary, not an exact printed table entry. Two independent computational paths---analytic inversion and forward-kinetics bisection---are compared in the tests.
+
+\subsection{The first-dive chart}
+The digital first-dive chart has 182 cells, including 127 numerical entries. Of the 127 numerical times, 120 satisfy their stated group's continuous upper-bound constraint. The seven exceptions are terminal group-N entries at 30, 35, 40, 50, 70, 100, and 110 fsw, inherited from the supplied empirical limits. Their model thresholds are shown in Table~\ref{tab:endpoints}.
+\begin{table}[ht]\centering
+\caption{Terminal chart entries exceeding the rounded group-N model boundary.}\label{tab:endpoints}
+\begin{tabular}{rrr}\toprule
+Depth (fsw)&Printed endpoint (min)&$T_N(d)$ (min)\\\midrule
+30&225&216.919118\\35&165&164.036949\\40&135&130.848390\\50&75&73.407897\\70&40&39.906234\\100&20&19.768120\\110&15&14.928963\\\bottomrule
+\end{tabular}
+\end{table}
+Only 35 numerical entries equal a simple integer floor of \eqref{eq:crossing}. The chart uses a coarser, nonuniform time grid, omissions, arrows, and independently retained limits. The short report does not specify a unique rule generating this complete presentation layer. We therefore preserve it as a transcribed chart and do not fabricate an ``exact rounding algorithm.''
+
+\section{Surface-interval reconstruction and comparison}
+Suppose only that the departure state satisfies $P_i\le\alpha_gM_i$ for every compartment. After $s$ minutes at the surface,
+\[
+P_i(s)=\Ps+(P_i(0)-\Ps)2^{-s/h_i}.
+\]
+For a lower target group $j$, a sufficient and box-sharp threshold is
+\begin{equation}
+S_{g,j}=\max_i\frac{h_i}{\log2}
+\log\!\left(\frac{\alpha_gM_i-\Ps}{\alpha_jM_i-\Ps}\right).
+\label{eq:surface}
+\end{equation}
+Here ``box-sharp'' refers to the mathematical uncertainty set $P_i\le\alpha_gM_i$, not to a claim that every state in the box is attainable by a permitted dive.
+
+For these parameters the 120-minute compartment always controls \eqref{eq:surface}. To see this, set $z_i=\Ps/M_i$. Both $h_i$ and $z_i$ increase with $i$, while
+\[
+\frac{d}{dz}\log\frac{\alpha_g-z}{\alpha_j-z}
+=\frac{\alpha_g-\alpha_j}{(\alpha_g-z)(\alpha_j-z)}>0.
+\]
+Thus the maximum occurs at $h_i=120$, $M_i=43$.
+
+The source chart has 105 interval cells: 14 diagonal cells and 91 downward transitions. Every printed downward-transition lower endpoint exceeds \eqref{eq:surface}; the extra delay ranges from 3.187513 to 20.647090 minutes. None equals $\lceil S_{g,j}\rceil$. For example, B to A is printed as starting at 151 minutes, against a model value of 141.518844; N to A starts at 507 minutes, against 486.352910. The excess cannot be explained solely by rounding up to the next minute.
+
+These differences are not automatically errors: they may embody conservative or procedural choices absent from the short description. Their origin remains unresolved. The reproduction retains the printed ranges, including the ten-minute lower display limit and the twelve-hour upper display limit; it does not reinterpret twelve hours as exact zero residual loading.
+
+\section{Residual nitrogen time: a useful but incomplete inverse rule}
+A natural numerical candidate is
+\begin{equation}
+R^{\mathrm{cand}}_g(d)=\lceil T_g(d)\rceil.
+\label{eq:rnt}
+\end{equation}
+It reproduces 169 of 179 finite residual-nitrogen-time (RNT) entries. Two of the three printed dashes also agree with infinite candidate times. The remaining dash, at group L and 20 fsw, corresponds to a finite candidate of 570 minutes. The complete mismatch list appears in Table~\ref{tab:rntdiff}. These are mismatches of a specified candidate rule, not a declaration that all differing source entries are misprints.
+\begin{table}[ht]\centering
+\caption{All disagreements with the simple ceil-first-crossing RNT candidate.}\label{tab:rntdiff}
+\begin{tabular}{crrr}\toprule
+Group&Depth (fsw)&Printed&Candidate\\\midrule
+L&20&dash&570\\N&30&225&217\\N&40&135&131\\N&50&75&74\\
+M&70&40&39\\N&70&41&40\\N&100&21&20\\A&110&2&3\\
+N&110&16&15\\N&120&13&12\\N&130&11&10\\\bottomrule
+\end{tabular}
+\end{table}
+The group-N values at 30, 40, and 50 fsw coincide with independently supplied empirical limits rather than the smaller minute-rounded crossings. Other one-minute discrepancies need further source-level investigation. The A/110 entry agrees with the legible 1981 scan and is not altered merely because a later printing differs.
+
+One must not turn this numerical resemblance into a universal residual-state theorem. The first crossing is a \emph{minimum} over compartments. A fictitious clean square exposure of that duration need not dominate every state satisfying the same group bound componentwise. Full-state equivalence, conservative group compression, and empirical table conventions are different assertions.
+
+\section{An exact mathematical check of first-dive/surface-interval compatibility}
+The small endpoint exceedances do not, by themselves, invalidate the subsequent charted surface-interval transitions. A separate computation checks them directly, without assuming the departure state is already inside its nominal group box.
+
+\begin{proposition}[Finite chart certificate]
+Under \eqref{eq:kinetics} and ordinary half-time surface washout, each of the 127 numerical first-dive endpoints, followed by the lower endpoint of each applicable printed surface-interval range, has all six compartment pressures below the target group's upper bounds. There are 998 profile--interval combinations and 5,988 compartment inequalities. Their minimum certified margin is at least
+\[
+\frac{26068979127}{429496729600}\ \mathrm{fsw}
+>0.06069657\ \mathrm{fsw}.
+\]
+The source reconstruction of columns J and K is as stated in Section 1.
+\end{proposition}
+\begin{proof}
+For an endpoint $(d,t)$ followed by a surface duration $s$, the exact pressure is
+\begin{equation}
+P_i^{\mathrm{after}}=\Ps+fd\left(2^{-s/h_i}-2^{-(s+t)/h_i}\right).
+\label{eq:cert}
+\end{equation}
+All relevant $s,t,h_i$ are nonnegative or positive integers. For $x=2^{-n/h}$, find $m=\lfloor2^{32}x\rfloor$ using integer arithmetic: the comparison
+$m^h\le2^{32h-n}$ is exact whenever $32h\ge n$; otherwise $0<x<2^{-32}$. This gives rational lower and upper bounds on each decay factor. Substitute an upper bound for the first exponential in \eqref{eq:cert} and a lower bound for the second. The accompanying program checks each resulting rational upper pressure against the rational target $\alpha_jM_i$. Every margin is positive, with the minimum bound displayed above.
+
+For fixed depth, shorter first-dive durations give no larger pressures. For these initially surface-equilibrated square dives, longer subsequent surface intervals decrease every loading. The endpoint checks consequently extend to the duration ranges bounded by the displayed times and interval endpoints, within this explicitly stated model.
+\end{proof}
+This certificate does not cover arbitrary repeated dives, multilevel profiles, empirical bubble production, or DCS outcomes. It is an exact finite verification of one precisely defined mathematical property, not a safety certificate.
+
+\section{Compartment irredundancy and unresolved questions}
+Every original compartment uniquely controls the continuous group-N boundary at at least one benchmark depth: the 120-, 80-, 40-, 20-, 10-, and 5-minute compartments control at 30, 40, 50, 70, 100, and 110 fsw, respectively. Hence none of the six fixed compartments can simply be deleted without changing the continuous model. This does not prove that six is the minimum number in a different refitted model, nor a lower bound for reproducing a rounded finite chart within a one-minute tolerance.
+
+The achieved results are a source-preserving implementation of all three charts, a reconstructed continuous kinetic/calibration model, explicit discrepancy tables, and a narrowly scoped exact certificate. Recovery of the original generator still requires the HP-67 routines or a more detailed description of the nonuniform first-dive grid, terminal RNT adjustments, and surface-interval conservatism. A stronger empirical reconstruction would additionally require checking the original Spencer observations and selection of the twelve limits; that is not accomplished by reproducing Huggins's printed numbers.
+
+\section{Reproducibility}
+The accompanying distribution contains the original-cell fixture with per-table provenance, a standard-library Python module, unit tests, CSV comparison tables, a JSON summary, and this self-contained LaTeX source. Run from the distribution root:
+\begin{verbatim}
+python -m unittest discover -s tests -v
+python models/huggins_1981/huggins.py \
+    --audit-dir validation/huggins_1981
+sh papers/spencer_huggins/build.sh
+\end{verbatim}
+Fifteen tests cover the Decimal oracle, halfway rounding, inverse/bisection agreement, all fixed-compartment controls, source-preserved discrepancies, chart partitioning, and the exact rational certificate. Passing these tests is internal numerical verification, not independent medical or regulatory review. Original code is Apache-2.0; original exposition is CC BY 4.0; historical-source rights remain separate.
+
+\begin{thebibliography}{9}
+\bibitem{Huggins1981} K. E. Huggins, \emph{New No-Decompression Tables Based on No-Decompression Limits Determined by Doppler Ultrasonic Bubble Detection}, Michigan Sea Grant, MICHU-SG-81-205 (1981). NOAA Institutional Repository, \url{https://repository.library.noaa.gov/view/noaa/42176}. Principal source; printed pp. 1--6.
+\bibitem{Huggins1987} K. E. Huggins, \emph{Microprocessor Applications to Multi-Level Air Decompression Problems}, MICHU-SG-87-201 (1987). NOAA Institutional Repository, \url{https://repository.library.noaa.gov/view/noaa/40558}. Appendix D, printed p. 99, used for clipped columns.
+\end{thebibliography}
+
+\clearpage\appendix
+\begin{landscape}
+\section{Historical first-dive chart}
+\noindent\textbf{Historical transcription only; not for dive planning.} The printed depth and limit columns are independent inputs. Columns J and K are recovered from Huggins (1987), Appendix D; all other cells retain the supplied 1981 readings. A dash, right arrow, and empty cell retain their distinct source meanings. The 20-fsw row has no finite printed limit, but its blank high-group cells are not populated by inference.
+\begin{center}\small
+\setlength{\tabcolsep}{5.5pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{rr*{14}{r}}\toprule
+Depth&Limit&A&B&C&D&E&F&G&H&I&J&K&L&M&N\\\midrule
+20&--&10&25&40&60&85&110&135&170&215&275&325&&&\\
+30&225&5&15&25&40&50&65&75&95&110&130&150&175&205&225\\
+35&165&5&15&20&30&40&50&60&70&85&100&120&135&155&165\\
+40&135&5&10&20&25&35&40&45&55&60&70&85&100&120&135\\
+50&75&--&10&15&20&25&30&35&37&40&50&55&60&70&75\\
+60&50&--&5&10&15&20&23&25&27&30&35&40&45&47&50\\
+70&40&--&5&10&13&15&17&20&23&25&27&30&33&35&40\\
+80&30&--&5&7&$\rightarrow$&10&13&15&17&20&$\rightarrow$&25&27&$\rightarrow$&30\\
+90&25&--&--&5&7&$\rightarrow$&10&$\rightarrow$&13&15&17&$\rightarrow$&20&23&25\\
+100&20&--&--&--&5&7&$\rightarrow$&$\rightarrow$&10&$\rightarrow$&$\rightarrow$&13&15&17&20\\
+110&15&--&--&--&--&5&$\rightarrow$&7&$\rightarrow$&$\rightarrow$&10&$\rightarrow$&$\rightarrow$&13&15\\
+120&10&--&--&--&--&--&5&$\rightarrow$&$\rightarrow$&7&$\rightarrow$&$\rightarrow$&10&&\\
+130&5&--&--&--&--&--&5&&&&&&&&\\
+\bottomrule\end{tabular}\end{center}
+\noindent All durations are minutes and depths are fsw. For audit purposes, the complete unquantized threshold matrix is supplied separately as \texttt{continuous\_thresholds.csv}; it is not substituted for this historical chart.
+\clearpage
+\section{Historical residual-nitrogen-time chart}
+\noindent\textbf{Historical transcription only; not for dive planning.} All cells below come from the 1981 report, printed p. 3. Underlining identifies numerical entries at or above the independently printed first-dive limit. It does not change the value. The printed A/110-fsw value 2 is preserved despite its disagreement with the candidate inverse formula.
+\begin{center}\small\setlength{\tabcolsep}{7pt}\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{c*{13}{r}}\toprule
+Group&20&30&35&40&50&60&70&80&90&100&110&120&130\\\midrule
+A&12&8&7&6&5&4&4&3&3&3&2&2&2\\
+B&28&18&16&14&11&9&8&7&6&6&5&5&4\\
+C&45&29&25&21&17&14&12&9&8&6&6&5&\underline{5}\\
+D&65&41&34&30&23&19&15&10&8&7&6&5&\underline{5}\\
+E&86&53&44&37&28&22&17&12&9&8&7&6&\underline{5}\\
+F&111&66&53&43&32&24&19&14&11&9&7&6&\underline{6}\\
+G&140&80&62&49&36&27&22&17&12&10&8&7&\underline{6}\\
+H&175&96&73&57&40&30&24&19&14&11&9&8&\underline{7}\\
+I&219&113&86&65&45&34&26&21&16&12&10&8&\underline{7}\\
+J&279&132&103&75&51&38&29&23&18&13&11&9&\underline{8}\\
+K&369&154&122&88&57&43&32&26&20&15&12&\underline{10}&\underline{8}\\
+L&--&178&139&103&64&47&35&28&22&18&13&\underline{11}&\underline{9}\\
+M&--&207&158&124&71&\underline{52}&\underline{40}&\underline{30}&\underline{25}&\underline{20}&\underline{15}&\underline{12}&\underline{10}\\
+N&--&\underline{225}&\underline{165}&\underline{135}&\underline{75}&\underline{53}&\underline{41}&\underline{31}&\underline{26}&\underline{21}&\underline{16}&\underline{13}&\underline{11}\\
+\bottomrule\end{tabular}\end{center}
+\noindent Depths are column headings (fsw); entries are minutes. The source has a dash at group L/20 fsw although the simple continuous candidate reaches that threshold after 569.168 minutes. A dash is not silently converted to 570 or to infinity.
+\clearpage
+\section{Historical surface-interval chart}
+\noindent\textbf{Historical transcription only; not for dive planning.} Columns indicate departure group; rows indicate group after the interval. Each cell shows \emph{lower endpoint above upper endpoint}, in hours:minutes, reversing the original upper/lower typography for readability. Both endpoints are inclusive integer minutes. Departure columns J and K are recovered from the author's 1987 reproduction. The twelve-hour cutoff is a display convention, not exact equilibrium.
+\begin{center}\scriptsize\setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.10}
+\begin{tabular}{c*{14}{c}}\toprule
+To / From&A&B&C&D&E&F&G&H&I&J&K&L&M&N\\\midrule
+A&\shortstack{0:10\\12:00}&\shortstack{2:31\\12:00}&\shortstack{3:42\\12:00}&\shortstack{4:43\\12:00}&\shortstack{5:23\\12:00}&\shortstack{5:57\\12:00}&\shortstack{6:21\\12:00}&\shortstack{6:49\\12:00}&\shortstack{7:09\\12:00}&\shortstack{7:30\\12:00}&\shortstack{7:46\\12:00}&\shortstack{8:01\\12:00}&\shortstack{8:18\\12:00}&\shortstack{8:27\\12:00}\\[3pt]
+B&&\shortstack{0:10\\2:30}&\shortstack{1:20\\3:41}&\shortstack{2:21\\4:42}&\shortstack{3:01\\5:22}&\shortstack{3:35\\5:56}&\shortstack{3:59\\6:20}&\shortstack{4:27\\6:48}&\shortstack{4:47\\7:08}&\shortstack{5:08\\7:29}&\shortstack{5:24\\7:45}&\shortstack{5:39\\8:00}&\shortstack{5:56\\8:17}&\shortstack{6:05\\8:26}\\[3pt]
+C&&&\shortstack{0:10\\1:19}&\shortstack{1:04\\2:20}&\shortstack{1:44\\3:00}&\shortstack{2:18\\3:34}&\shortstack{2:42\\3:58}&\shortstack{3:10\\4:26}&\shortstack{3:30\\4:46}&\shortstack{3:51\\5:07}&\shortstack{4:07\\5:23}&\shortstack{4:22\\5:38}&\shortstack{4:39\\5:55}&\shortstack{4:48\\6:04}\\[3pt]
+D&&&&\shortstack{0:10\\1:03}&\shortstack{0:50\\1:43}&\shortstack{1:24\\2:17}&\shortstack{1:48\\2:41}&\shortstack{2:16\\3:09}&\shortstack{2:36\\3:29}&\shortstack{2:57\\3:50}&\shortstack{3:13\\4:06}&\shortstack{3:28\\4:21}&\shortstack{3:45\\4:38}&\shortstack{3:54\\4:47}\\[3pt]
+E&&&&&\shortstack{0:10\\0:49}&\shortstack{0:43\\1:23}&\shortstack{1:07\\1:47}&\shortstack{1:35\\2:15}&\shortstack{1:55\\2:35}&\shortstack{2:16\\2:56}&\shortstack{2:32\\3:12}&\shortstack{2:47\\3:27}&\shortstack{3:04\\3:44}&\shortstack{3:13\\3:53}\\[3pt]
+F&&&&&&\shortstack{0:10\\0:42}&\shortstack{0:34\\1:06}&\shortstack{1:02\\1:34}&\shortstack{1:22\\1:54}&\shortstack{1:43\\2:15}&\shortstack{1:59\\2:31}&\shortstack{2:14\\2:46}&\shortstack{2:31\\3:03}&\shortstack{2:40\\3:12}\\[3pt]
+G&&&&&&&\shortstack{0:10\\0:33}&\shortstack{0:34\\1:01}&\shortstack{0:54\\1:21}&\shortstack{1:15\\1:42}&\shortstack{1:31\\1:58}&\shortstack{1:46\\2:13}&\shortstack{2:03\\2:30}&\shortstack{2:12\\2:39}\\[3pt]
+H&&&&&&&&\shortstack{0:10\\0:33}&\shortstack{0:30\\0:53}&\shortstack{0:51\\1:14}&\shortstack{1:07\\1:30}&\shortstack{1:22\\1:45}&\shortstack{1:39\\2:02}&\shortstack{1:48\\2:11}\\[3pt]
+I&&&&&&&&&\shortstack{0:10\\0:29}&\shortstack{0:29\\0:50}&\shortstack{0:45\\1:06}&\shortstack{1:01\\1:21}&\shortstack{1:17\\1:38}&\shortstack{1:26\\1:47}\\[3pt]
+J&&&&&&&&&&\shortstack{0:10\\0:28}&\shortstack{0:26\\0:44}&\shortstack{0:42\\1:00}&\shortstack{0:58\\1:16}&\shortstack{1:07\\1:25}\\[3pt]
+K&&&&&&&&&&&\shortstack{0:10\\0:25}&\shortstack{0:24\\0:41}&\shortstack{0:40\\0:57}&\shortstack{0:49\\1:06}\\[3pt]
+L&&&&&&&&&&&&\shortstack{0:10\\0:23}&\shortstack{0:24\\0:39}&\shortstack{0:33\\0:48}\\[3pt]
+M&&&&&&&&&&&&&\shortstack{0:10\\0:23}&\shortstack{0:18\\0:32}\\[3pt]
+N&&&&&&&&&&&&&&\shortstack{0:10\\0:17}\\[3pt]
+\bottomrule\end{tabular}\end{center}
+\noindent These ranges reproduce a historical chart. Their formula-level origin is not fully recovered. All 91 downward transitions satisfy the derived compartment-box bound, and all charted first-dive/surface-interval combinations satisfy the limited exact certificate proved in the main text.
+\end{landscape}
+\end{document}
