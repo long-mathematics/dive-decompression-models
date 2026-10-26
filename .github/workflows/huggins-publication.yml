@@ -1,0 +1,68 @@
+name: Build and publish Spencer-Huggins note
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'papers/spencer_huggins/**'
+      - 'models/huggins_1981/**'
+      - 'tests/test_huggins*.py'
+      - 'tests/fixtures/huggins_1981.json'
+      - '.github/workflows/huggins-publication.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: huggins-publication
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install TeX toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended texlive-fonts-recommended lmodern
+      - name: Test and regenerate audit outputs
+        run: |
+          python -m unittest discover -s tests -v
+          mkdir -p validation/huggins_1981
+          python -m unittest discover -s tests -p 'test_huggins*.py' -v > validation/huggins_1981/test_results.txt 2>&1
+          python models/huggins_1981/huggins.py --audit-dir validation/huggins_1981
+          python -m models.huggins_1981.surface_structure --audit-dir validation/huggins_1981
+      - name: Build the manuscript and manifest
+        env:
+          HUGGINS_SOURCE_COMMIT: ${{ github.sha }}
+        run: |
+          sh papers/spencer_huggins/build.sh
+          python papers/spencer_huggins/write_manifest.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: spencer-huggins-v1.1
+          path: |
+            output/pdf/spencer_huggins_reconstruction.pdf
+            output/pdf/spencer_huggins_manifest.json
+            validation/huggins_1981/
+      - name: Publish generated files without overwriting a concurrent source update
+        env:
+          SOURCE_COMMIT: ${{ github.sha }}
+        run: |
+          git fetch origin main
+          if [ "$(git rev-parse origin/main)" != "$SOURCE_COMMIT" ]; then
+            echo 'Main advanced during the build; keeping artifacts and skipping the publication commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add output/pdf/spencer_huggins_reconstruction.pdf output/pdf/spencer_huggins_manifest.json validation/huggins_1981
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Publish Spencer-Huggins PDF and audit outputs for $SOURCE_COMMIT"
+          git push origin HEAD:main

@@ -2,48 +2,45 @@
 
 **Research only. Not for dive planning or live dive-computer use.**
 
-The continuous six-compartment model and the historical chart are separate objects. The implementation preserves unexplained printed entries rather than overwriting them with mathematical predictions. It does not claim recovery of the unpublished HP-67 routines or physiological validation.
+The continuous six-compartment model and historical charts are separate objects. The code preserves unexplained printed entries instead of replacing them with model predictions.
+
+[Eight-page manuscript, version 1.1](../../output/pdf/spencer_huggins_reconstruction.pdf) · [Source and audit](../../papers/spencer_huggins/README.md) · [Data fixture](../../tests/fixtures/huggins_1981.json)
 
 ## Reproduce
 
-From the repository or distribution root, using Python 3.10 or later (standard library only):
-
 ```bash
-python -m unittest discover -s tests -p 'test_huggins1981.py' -v
+python -m unittest discover -s tests -p 'test_huggins*.py' -v
 python models/huggins_1981/huggins.py --audit-dir validation/huggins_1981
+python -m models.huggins_1981.surface_structure --audit-dir validation/huggins_1981
 sh papers/spencer_huggins/build.sh
 ```
 
-The last command requires a LaTeX installation and produces the manuscript PDF under `output/pdf/`.
+Python 3.10+ and the standard library suffice for all 19 Huggins-specific tests; the final command also requires TeX.
 
-## Findings
+## Established calculations
 
 | Check | Result |
 | --- | --- |
 | Rounded surfacing M-values | All 6 reproduced |
-| Intermediate tissue pressures | 70 of 72 agree; original discrepancies preserved |
-| First-dive chart | 182 cells transcribed; 127 numeric endpoints, 7 exceed rounded group-N model limits |
-| RNT candidate `ceil(first crossing)` | 169 of 179 finite entries agree; 11 total differences including a dash |
-| Surface chart | All 105 ranges transcribed; all 91 downward transitions exceed the derived box bound, none is simply its ceiling |
-| Exact first-dive/surface-interval check | 998 combinations; 5,988 rationally bounded inequalities, all pass |
-| Automated tests | 15 pass locally |
+| Intermediate pressures | 70 of 72 agree; original discrepancies preserved |
+| First-dive numerical endpoints | 120 of 127 satisfy nominal group bounds; 7 terminal exceptions |
+| Finite RNT entries | 169 of 179 match the explicitly stated first-crossing candidate |
+| Surface intervals | All 105 ranges transcribed; 91 downward transitions exceed the derived box bound |
+| Additive structure | 25 anchors; 63 of 66 genuine predictions exact, 3 one-minute exceptions |
+| First-dive/surface certificate | 998 combinations; 5,988 exact rational inequalities pass |
 
-The two substantive pressure discrepancies are 52.41 versus 52.14 (35 fsw / 165 min / 40-min compartment) and 39.96 versus 37.96 (60 fsw / 50 min / 120-min compartment). Neither changes a calibrated M-value.
+A row offset plus a column offset is not one common group clock. A single-potential model with a fixed buffer and uniform upward rounding is ruled out by two triangle quantities (9 and 3). More general scalar-cutoff explanations are hypotheses, not recovered historical rules.
 
-The exact certificate applies only to initially surface-equilibrated square first dives followed by one printed surface interval. It does not certify arbitrary repetitions, multilevel exposures, bubble risk, or diver safety.
+The certificate covers initially equilibrated square first dives followed by one printed surface interval. It does not cover arbitrary repetitive or multilevel histories or physiological outcomes.
 
 ## Sources and edition control
 
-Primary source: Karl E. Huggins, *New No-Decompression Tables Based on No-Decompression Limits Determined by Doppler Ultrasonic Bubble Detection*, MICHU-SG-81-205 (1981), printed pp. 1–6. [NOAA record](https://repository.library.noaa.gov/view/noaa/42176).
+Primary source: Huggins (1981), MICHU-SG-81-205, printed pp. 1–6. [NOAA record](https://repository.library.noaa.gov/view/noaa/42176).
 
-The supplied scan clips columns J and K of two charts. Those columns alone are recovered from the author's 1987 *Microprocessor Applications to Multi-Level Air Decompression Problems*, Appendix D, printed p. 99 (PDF p. 108). [NOAA record](https://repository.library.noaa.gov/view/noaa/40558). This is an explicitly documented two-witness reconstruction. Readable 1981 entries take precedence over later versions, including RNT A/110 = 2. The 2001 HUGI card is not substituted.
+Columns J and K clipped from the supplied scan are recovered only from the author's 1987 reproduction, Appendix D, printed p. 99. [NOAA record](https://repository.library.noaa.gov/view/noaa/40558). Legible 1981 entries take precedence, including RNT A/110 = 2. Source hashes and cell provenance are in the unchanged fixture. This reconstructs Spencer's limits as tabulated by Huggins, not Spencer's raw Doppler observations.
 
-The fixture is [`tests/fixtures/huggins_1981.json`](../../tests/fixtures/huggins_1981.json). The manuscript source is [`papers/spencer_huggins/spencer_huggins_reconstruction.tex`](../../papers/spencer_huggins/spencer_huggins_reconstruction.tex). CSV ledgers and the JSON audit summary are generated by the command above.
+## Hypotheses and open questions
 
-Spencer's original 1976 raw Doppler observations are not reanalyzed here: the empirical inputs are his limits **as tabulated by Huggins**.
+The two intermediate-pressure discrepancies plausibly reflect transposition/copying errors. The full first-dive grid, remaining RNT adjustments, surface-interval generator, minimum dimension after refitting, and empirical recovery of the selected limits remain open. No exact HP-67 recovery or physiological validation is asserted.
 
-## Remaining reconstruction questions
-
-The report does not uniquely specify the nonuniform first-dive grid, the terminal RNT adjustments, or the extra delay in its surface intervals. The implementation labels candidate rules and discrepancies rather than inventing missing historical decisions. Each original fixed compartment is active somewhere in the continuous model, but optimality among refitted lower-dimensional models remains open.
-
-Original software is Apache-2.0; original exposition is CC BY 4.0. Third-party source rights remain separate under the repository's mixed-license policy.
+Original code is Apache-2.0 and exposition is CC BY 4.0; historical-source rights remain separate.
