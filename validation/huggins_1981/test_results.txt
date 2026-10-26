@@ -1,0 +1,24 @@
+test_all_six_fixed_compartments_are_active (test_huggins1981.HugginsTests.test_all_six_fixed_compartments_are_active) ... ok
+test_calibration_and_two_preserved_discrepancies (test_huggins1981.HugginsTests.test_calibration_and_two_preserved_discrepancies) ... ok
+test_exact_halfway_rounding (test_huggins1981.HugginsTests.test_exact_halfway_rounding) ... ok
+test_exact_rational_first_surface_certificate (test_huggins1981.HugginsTests.test_exact_rational_first_surface_certificate) ... ok
+test_half_time (test_huggins1981.HugginsTests.test_half_time) ... ok
+test_historical_surface_ranges_partition_integer_minutes (test_huggins1981.HugginsTests.test_historical_surface_ranges_partition_integer_minutes) ... ok
+test_independent_decimal_loading_oracle (test_huggins1981.HugginsTests.test_independent_decimal_loading_oracle) ... ok
+test_invalid_inputs (test_huggins1981.HugginsTests.test_invalid_inputs) ... ok
+test_inverse_against_independent_bisection (test_huggins1981.HugginsTests.test_inverse_against_independent_bisection) ... ok
+test_literal_printed_constant_is_not_silently_substituted (test_huggins1981.HugginsTests.test_literal_printed_constant_is_not_silently_substituted) ... ok
+test_rnt_is_not_overclaimed (test_huggins1981.HugginsTests.test_rnt_is_not_overclaimed) ... ok
+test_seven_empirical_endpoints_exceed_rounded_limits (test_huggins1981.HugginsTests.test_seven_empirical_endpoints_exceed_rounded_limits) ... ok
+test_surface_bounds_and_all_printed_transition_margins (test_huggins1981.HugginsTests.test_surface_bounds_and_all_printed_transition_margins) ... ok
+test_surface_closed_form_matches_120_minute_compartment (test_huggins1981.HugginsTests.test_surface_closed_form_matches_120_minute_compartment) ... ok
+test_surface_equilibrium (test_huggins1981.HugginsTests.test_surface_equilibrium) ... ok
+test_anchor_and_prediction_counts (test_huggins_structure.SurfaceStructureTests.test_anchor_and_prediction_counts) ... ok
+test_anchor_equalities_are_not_counted_as_predictions (test_huggins_structure.SurfaceStructureTests.test_anchor_equalities_are_not_counted_as_predictions) ... ok
+test_single_potential_fixed_buffer_ceiling_is_insufficient (test_huggins_structure.SurfaceStructureTests.test_single_potential_fixed_buffer_ceiling_is_insufficient) ... ok
+test_three_one_minute_exceptions (test_huggins_structure.SurfaceStructureTests.test_three_one_minute_exceptions) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.226s
+
+OK

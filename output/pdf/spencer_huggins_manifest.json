@@ -1,0 +1,99 @@
+{
+  "title": "The Spencer-Huggins No-Decompression Tables",
+  "version": "1.1",
+  "source_commit": "24635cf58580b70df9d87ac550c23c28ede1fd05",
+  "huggins_tests": 19,
+  "files": [
+    {
+      "path": "papers/spencer_huggins/spencer_huggins_reconstruction.tex",
+      "bytes": 23441,
+      "sha256": "55a4ed95e0ee79d617f85c1455323b1f0deb0a2b5832e5e0fb31bc8c4eb85a5f"
+    },
+    {
+      "path": "papers/spencer_huggins/build.sh",
+      "bytes": 746,
+      "sha256": "8928db33ac068fa5dd6bfa49aa4c5a5dbf1ccb31e60044b0fd8905dbe74b6b74"
+    },
+    {
+      "path": "papers/spencer_huggins/write_manifest.py",
+      "bytes": 1392,
+      "sha256": "3903667d8f978547c800554a34879fb6998c05e8d9e847e9cf83ea540c83c85b"
+    },
+    {
+      "path": "models/huggins_1981/huggins.py",
+      "bytes": 14818,
+      "sha256": "66117a012796e0af03ecc32e12570c055ddc1c0f6b72ecd1573c855e87b4dcd2"
+    },
+    {
+      "path": "models/huggins_1981/surface_structure.py",
+      "bytes": 3068,
+      "sha256": "c74127325d0aa1b912234ea69d30d256b0fabea5866598b4d2d9a68e727dcca1"
+    },
+    {
+      "path": "tests/test_huggins1981.py",
+      "bytes": 5919,
+      "sha256": "c52a55d46b90cf374f04a270f1c7e2875e3601efddab529ece8af03a0d65cabb"
+    },
+    {
+      "path": "tests/test_huggins_structure.py",
+      "bytes": 1653,
+      "sha256": "3637b247f5149646e1c939339c7d6abd927a0c750f1f60f6fbc2f3e82c9e88be"
+    },
+    {
+      "path": "tests/fixtures/huggins_1981.json",
+      "bytes": 3907,
+      "sha256": "496a60eec9d36ea3725dd042bb2930050bd3291c9b2f70b4117674a44495c1fb"
+    },
+    {
+      "path": "output/pdf/spencer_huggins_reconstruction.pdf",
+      "bytes": 285592,
+      "sha256": "176a537ee1a7b9b89c91cf0dc059f9d72396f5863c3d24417c87781b5f4d4ec2"
+    },
+    {
+      "path": "validation/huggins_1981/audit_summary.json",
+      "bytes": 5845,
+      "sha256": "14fe66c7b0c26a9622ed09608b4f2ccbd562cb7c5e6e37fd9f5fef76d25d1bdf"
+    },
+    {
+      "path": "validation/huggins_1981/continuous_thresholds.csv",
+      "bytes": 4488,
+      "sha256": "2e100fd72370308110bd810a84d89a7d17da81d6e3c9501ac493f060ee68521c"
+    },
+    {
+      "path": "validation/huggins_1981/first_dive_audit.csv",
+      "bytes": 10281,
+      "sha256": "7f4ec54fc54482df82085eec0bd576f087dc465b5e7b075ef4809bafab285516"
+    },
+    {
+      "path": "validation/huggins_1981/pressure_audit.csv",
+      "bytes": 5525,
+      "sha256": "7096f50e0f8e99cb6941505fc81ae37e48f25547754a96400a1a0f7983892074"
+    },
+    {
+      "path": "validation/huggins_1981/rnt_audit.csv",
+      "bytes": 6263,
+      "sha256": "9f1d9af4b6d32c0105e6ae5b0dbaac85a52c2f5d65752a7e3a83c3f56cd45246"
+    },
+    {
+      "path": "validation/huggins_1981/surface_interval_audit.csv",
+      "bytes": 7501,
+      "sha256": "3ec2af5fcf651604443745929a45d1723fcd8f067930cf23ae2c0228b3bc2d38"
+    },
+    {
+      "path": "validation/huggins_1981/surface_structure.csv",
+      "bytes": 1887,
+      "sha256": "198b7ad791c30d021f007726d653c5c5a6ccca5b5c02a3bd52fb8ae5c3cfcea3"
+    },
+    {
+      "path": "validation/huggins_1981/surface_structure.json",
+      "bytes": 15702,
+      "sha256": "c4ee992375c8dce18707a04527f06ac1f13a5c79abda8bdac85eb61a7b279404"
+    },
+    {
+      "path": "validation/huggins_1981/test_results.txt",
+      "bytes": 2492,
+      "sha256": "25c626e9d944a58f4bd75971db9ae0d683f2ce92180a00c6178ee8d7a803d6d7"
+    }
+  ],
+  "scope": "Internal numerical and mathematical audit; no physiological validation."
+}

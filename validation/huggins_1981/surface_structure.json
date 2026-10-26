@@ -1,0 +1,768 @@
+{
+  "transitions": 91,
+  "anchoring_entries": 25,
+  "nontrivial_predictions": 66,
+  "exact_nontrivial_predictions": 63,
+  "max_absolute_prediction_error_min": 1,
+  "exceptions": [
+    {
+      "departure": "L",
+      "destination": "I",
+      "printed_min": 61,
+      "predicted_min": 60,
+      "residual_min": 1,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "J",
+      "printed_min": 42,
+      "predicted_min": 41,
+      "residual_min": 1,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "K",
+      "printed_min": 24,
+      "predicted_min": 23,
+      "residual_min": 1,
+      "anchor": false
+    }
+  ],
+  "single_potential_triangle_witnesses": {
+    "D-B-A": 9,
+    "D-C-A": 3
+  },
+  "interpretation": "Near row-column additive structure. Historical generating rule is not identified.",
+  "rows": [
+    {
+      "departure": "B",
+      "destination": "A",
+      "printed_min": 151,
+      "predicted_min": 151,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "C",
+      "destination": "A",
+      "printed_min": 222,
+      "predicted_min": 222,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "C",
+      "destination": "B",
+      "printed_min": 80,
+      "predicted_min": 80,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "D",
+      "destination": "A",
+      "printed_min": 283,
+      "predicted_min": 283,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "D",
+      "destination": "B",
+      "printed_min": 141,
+      "predicted_min": 141,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "D",
+      "destination": "C",
+      "printed_min": 64,
+      "predicted_min": 64,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "E",
+      "destination": "A",
+      "printed_min": 323,
+      "predicted_min": 323,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "E",
+      "destination": "B",
+      "printed_min": 181,
+      "predicted_min": 181,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "E",
+      "destination": "C",
+      "printed_min": 104,
+      "predicted_min": 104,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "E",
+      "destination": "D",
+      "printed_min": 50,
+      "predicted_min": 50,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "F",
+      "destination": "A",
+      "printed_min": 357,
+      "predicted_min": 357,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "F",
+      "destination": "B",
+      "printed_min": 215,
+      "predicted_min": 215,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "F",
+      "destination": "C",
+      "printed_min": 138,
+      "predicted_min": 138,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "F",
+      "destination": "D",
+      "printed_min": 84,
+      "predicted_min": 84,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "F",
+      "destination": "E",
+      "printed_min": 43,
+      "predicted_min": 43,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "G",
+      "destination": "A",
+      "printed_min": 381,
+      "predicted_min": 381,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "G",
+      "destination": "B",
+      "printed_min": 239,
+      "predicted_min": 239,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "G",
+      "destination": "C",
+      "printed_min": 162,
+      "predicted_min": 162,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "G",
+      "destination": "D",
+      "printed_min": 108,
+      "predicted_min": 108,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "G",
+      "destination": "E",
+      "printed_min": 67,
+      "predicted_min": 67,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "G",
+      "destination": "F",
+      "printed_min": 34,
+      "predicted_min": 34,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "H",
+      "destination": "A",
+      "printed_min": 409,
+      "predicted_min": 409,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "H",
+      "destination": "B",
+      "printed_min": 267,
+      "predicted_min": 267,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "H",
+      "destination": "C",
+      "printed_min": 190,
+      "predicted_min": 190,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "H",
+      "destination": "D",
+      "printed_min": 136,
+      "predicted_min": 136,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "H",
+      "destination": "E",
+      "printed_min": 95,
+      "predicted_min": 95,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "H",
+      "destination": "F",
+      "printed_min": 62,
+      "predicted_min": 62,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "H",
+      "destination": "G",
+      "printed_min": 34,
+      "predicted_min": 34,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "I",
+      "destination": "A",
+      "printed_min": 429,
+      "predicted_min": 429,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "I",
+      "destination": "B",
+      "printed_min": 287,
+      "predicted_min": 287,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "I",
+      "destination": "C",
+      "printed_min": 210,
+      "predicted_min": 210,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "I",
+      "destination": "D",
+      "printed_min": 156,
+      "predicted_min": 156,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "I",
+      "destination": "E",
+      "printed_min": 115,
+      "predicted_min": 115,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "I",
+      "destination": "F",
+      "printed_min": 82,
+      "predicted_min": 82,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "I",
+      "destination": "G",
+      "printed_min": 54,
+      "predicted_min": 54,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "I",
+      "destination": "H",
+      "printed_min": 30,
+      "predicted_min": 30,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "J",
+      "destination": "A",
+      "printed_min": 450,
+      "predicted_min": 450,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "J",
+      "destination": "B",
+      "printed_min": 308,
+      "predicted_min": 308,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "J",
+      "destination": "C",
+      "printed_min": 231,
+      "predicted_min": 231,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "J",
+      "destination": "D",
+      "printed_min": 177,
+      "predicted_min": 177,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "J",
+      "destination": "E",
+      "printed_min": 136,
+      "predicted_min": 136,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "J",
+      "destination": "F",
+      "printed_min": 103,
+      "predicted_min": 103,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "J",
+      "destination": "G",
+      "printed_min": 75,
+      "predicted_min": 75,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "J",
+      "destination": "H",
+      "printed_min": 51,
+      "predicted_min": 51,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "J",
+      "destination": "I",
+      "printed_min": 29,
+      "predicted_min": 29,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "K",
+      "destination": "A",
+      "printed_min": 466,
+      "predicted_min": 466,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "K",
+      "destination": "B",
+      "printed_min": 324,
+      "predicted_min": 324,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "K",
+      "destination": "C",
+      "printed_min": 247,
+      "predicted_min": 247,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "K",
+      "destination": "D",
+      "printed_min": 193,
+      "predicted_min": 193,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "K",
+      "destination": "E",
+      "printed_min": 152,
+      "predicted_min": 152,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "K",
+      "destination": "F",
+      "printed_min": 119,
+      "predicted_min": 119,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "K",
+      "destination": "G",
+      "printed_min": 91,
+      "predicted_min": 91,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "K",
+      "destination": "H",
+      "printed_min": 67,
+      "predicted_min": 67,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "K",
+      "destination": "I",
+      "printed_min": 45,
+      "predicted_min": 45,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "K",
+      "destination": "J",
+      "printed_min": 26,
+      "predicted_min": 26,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "A",
+      "printed_min": 481,
+      "predicted_min": 481,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "L",
+      "destination": "B",
+      "printed_min": 339,
+      "predicted_min": 339,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "C",
+      "printed_min": 262,
+      "predicted_min": 262,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "D",
+      "printed_min": 208,
+      "predicted_min": 208,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "E",
+      "printed_min": 167,
+      "predicted_min": 167,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "F",
+      "printed_min": 134,
+      "predicted_min": 134,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "G",
+      "printed_min": 106,
+      "predicted_min": 106,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "H",
+      "printed_min": 82,
+      "predicted_min": 82,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "I",
+      "printed_min": 61,
+      "predicted_min": 60,
+      "residual_min": 1,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "J",
+      "printed_min": 42,
+      "predicted_min": 41,
+      "residual_min": 1,
+      "anchor": false
+    },
+    {
+      "departure": "L",
+      "destination": "K",
+      "printed_min": 24,
+      "predicted_min": 23,
+      "residual_min": 1,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "A",
+      "printed_min": 498,
+      "predicted_min": 498,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "M",
+      "destination": "B",
+      "printed_min": 356,
+      "predicted_min": 356,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "C",
+      "printed_min": 279,
+      "predicted_min": 279,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "D",
+      "printed_min": 225,
+      "predicted_min": 225,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "E",
+      "printed_min": 184,
+      "predicted_min": 184,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "F",
+      "printed_min": 151,
+      "predicted_min": 151,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "G",
+      "printed_min": 123,
+      "predicted_min": 123,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "H",
+      "printed_min": 99,
+      "predicted_min": 99,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "I",
+      "printed_min": 77,
+      "predicted_min": 77,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "J",
+      "printed_min": 58,
+      "predicted_min": 58,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "K",
+      "printed_min": 40,
+      "predicted_min": 40,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "M",
+      "destination": "L",
+      "printed_min": 24,
+      "predicted_min": 24,
+      "residual_min": 0,
+      "anchor": false
+    },
+    {
+      "departure": "N",
+      "destination": "A",
+      "printed_min": 507,
+      "predicted_min": 507,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "B",
+      "printed_min": 365,
+      "predicted_min": 365,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "C",
+      "printed_min": 288,
+      "predicted_min": 288,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "D",
+      "printed_min": 234,
+      "predicted_min": 234,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "E",
+      "printed_min": 193,
+      "predicted_min": 193,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "F",
+      "printed_min": 160,
+      "predicted_min": 160,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "G",
+      "printed_min": 132,
+      "predicted_min": 132,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "H",
+      "printed_min": 108,
+      "predicted_min": 108,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "I",
+      "printed_min": 86,
+      "predicted_min": 86,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "J",
+      "printed_min": 67,
+      "predicted_min": 67,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "K",
+      "printed_min": 49,
+      "predicted_min": 49,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "L",
+      "printed_min": 33,
+      "predicted_min": 33,
+      "residual_min": 0,
+      "anchor": true
+    },
+    {
+      "departure": "N",
+      "destination": "M",
+      "printed_min": 18,
+      "predicted_min": 18,
+      "residual_min": 0,
+      "anchor": true
+    }
+  ]
+}

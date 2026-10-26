@@ -1,0 +1,224 @@
+{
+  "first_surface_certificate": {
+    "profile_interval_combinations": 998,
+    "compartment_inequalities": 5988,
+    "exact_rational_certified": true,
+    "violations": [],
+    "minimum_margin_lower_bound_fsw": "26068979127/429496729600",
+    "minimum_margin_lower_bound_decimal": 0.060696571895387026,
+    "enclosure_bits": 32,
+    "scope": "Square first-dive endpoints followed by one printed surface interval; not arbitrary repetitive histories or physiological validation."
+  },
+  "pressure_cells": 72,
+  "pressure_matches": 70,
+  "literal_0693_pressure_matches": 49,
+  "calibrated_m0": [
+    102.0,
+    85.0,
+    67.5,
+    54.5,
+    47.5,
+    43.0
+  ],
+  "published_m0": [
+    102.0,
+    85.0,
+    67.5,
+    54.5,
+    47.5,
+    43.0
+  ],
+  "m0_matches": 6,
+  "first_dive_cells": 182,
+  "first_dive_numeric_cells": 127,
+  "first_dive_numeric_satisfying_group_bound": 120,
+  "first_dive_numeric_matching_simple_floor": 35,
+  "rnt_cells": 182,
+  "rnt_finite_cells": 179,
+  "rnt_candidate_matches": 171,
+  "rnt_candidate_finite_matches": 169,
+  "rnt_unexplained_candidates": [
+    {
+      "depth_fsw": 20,
+      "group": "L",
+      "printed_rnt_min": null,
+      "candidate_ceil_first_crossing_min": 570,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 30,
+      "group": "N",
+      "printed_rnt_min": 225,
+      "candidate_ceil_first_crossing_min": 217,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 40,
+      "group": "N",
+      "printed_rnt_min": 135,
+      "candidate_ceil_first_crossing_min": 131,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 50,
+      "group": "N",
+      "printed_rnt_min": 75,
+      "candidate_ceil_first_crossing_min": 74,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 70,
+      "group": "M",
+      "printed_rnt_min": 40,
+      "candidate_ceil_first_crossing_min": 39,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 70,
+      "group": "N",
+      "printed_rnt_min": 41,
+      "candidate_ceil_first_crossing_min": 40,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 100,
+      "group": "N",
+      "printed_rnt_min": 21,
+      "candidate_ceil_first_crossing_min": 20,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 110,
+      "group": "A",
+      "printed_rnt_min": 2,
+      "candidate_ceil_first_crossing_min": 3,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 110,
+      "group": "N",
+      "printed_rnt_min": 16,
+      "candidate_ceil_first_crossing_min": 15,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 120,
+      "group": "N",
+      "printed_rnt_min": 13,
+      "candidate_ceil_first_crossing_min": 12,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    },
+    {
+      "depth_fsw": 130,
+      "group": "N",
+      "printed_rnt_min": 11,
+      "candidate_ceil_first_crossing_min": 10,
+      "agrees": false,
+      "source": "Huggins 1981 p.3"
+    }
+  ],
+  "surface_ranges": 105,
+  "surface_transitions": 91,
+  "surface_conservative_transitions": 91,
+  "surface_ceil_threshold_matches": 0,
+  "surface_extra_min": 3.1875134103662077,
+  "surface_extra_max": 20.64709008910239,
+  "pressure_discrepancies": [
+    {
+      "depth_fsw": 35,
+      "exposure_min": 165,
+      "half_time_min": 40,
+      "printed_fsw": "52.41",
+      "calculated_fsw": "52.135302387836927527643192181496369160295699040501",
+      "rounded_half_up": "52.14",
+      "literal_0693": "52.13",
+      "agrees": false
+    },
+    {
+      "depth_fsw": 60,
+      "exposure_min": 50,
+      "half_time_min": 120,
+      "printed_fsw": "39.96",
+      "calculated_fsw": "37.960122278022648478457046650893839627639008176558",
+      "rounded_half_up": "37.96",
+      "literal_0693": "37.96",
+      "agrees": false
+    }
+  ],
+  "first_dive_group_exceedances": [
+    {
+      "depth_fsw": 30,
+      "group": "N",
+      "printed_cell": 225,
+      "source": "Huggins 1981 pp.2-3",
+      "continuous_crossing_min": 216.9191184252749,
+      "satisfies_group_bound": false,
+      "numeric": true
+    },
+    {
+      "depth_fsw": 35,
+      "group": "N",
+      "printed_cell": 165,
+      "source": "Huggins 1981 pp.2-3",
+      "continuous_crossing_min": 164.03694895971563,
+      "satisfies_group_bound": false,
+      "numeric": true
+    },
+    {
+      "depth_fsw": 40,
+      "group": "N",
+      "printed_cell": 135,
+      "source": "Huggins 1981 pp.2-3",
+      "continuous_crossing_min": 130.84839033655723,
+      "satisfies_group_bound": false,
+      "numeric": true
+    },
+    {
+      "depth_fsw": 50,
+      "group": "N",
+      "printed_cell": 75,
+      "source": "Huggins 1981 pp.2-3",
+      "continuous_crossing_min": 73.40789724681105,
+      "satisfies_group_bound": false,
+      "numeric": true
+    },
+    {
+      "depth_fsw": 70,
+      "group": "N",
+      "printed_cell": 40,
+      "source": "Huggins 1981 pp.2-3",
+      "continuous_crossing_min": 39.906233855969326,
+      "satisfies_group_bound": false,
+      "numeric": true
+    },
+    {
+      "depth_fsw": 100,
+      "group": "N",
+      "printed_cell": 20,
+      "source": "Huggins 1981 pp.2-3",
+      "continuous_crossing_min": 19.76812036589211,
+      "satisfies_group_bound": false,
+      "numeric": true
+    },
+    {
+      "depth_fsw": 110,
+      "group": "N",
+      "printed_cell": 15,
+      "source": "Huggins 1981 pp.2-3",
+      "continuous_crossing_min": 14.92896325649285,
+      "satisfies_group_bound": false,
+      "numeric": true
+    }
+  ],
+  "statement": "Historical reconstruction with a discrepancy ledger, not complete recovery of the unpublished HP-67 program or physiological validation."
+}
