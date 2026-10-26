@@ -1,0 +1,545 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black}
+
+\newtheorem{remark}{Remark}
+
+\title{The DSAT Recreational Dive Planner:\\
+       Algorithm, Mathematics, and Physical Justification\\[6pt]
+       \large Rebuilt from Hamilton, Rogers, Powell, \& Vann (1994)}
+\author{Christopher}
+\date{March 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document presents a complete, self-contained derivation of the decompression
+algorithm underlying PADI's Recreational Dive Planner (RDP), reconstructed from
+the primary source report by Hamilton, Rogers, Powell, and Vann (1994).
+Every parameter, equation, and design decision is stated explicitly, traced to
+its physical or empirical justification, and verified numerically against the
+published tables.  The goal is an independent audit: a diver should be able
+to read this document, understand every step, and reproduce the published
+NDL tables to within the known fitting residuals.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+% ==================================================================
+\section{Physical Foundations}
+% ==================================================================
+
+\subsection{The dissolved-gas problem}
+
+A scuba diver breathes compressed air at ambient pressure.  The partial
+pressure of nitrogen in the inspired gas increases with depth, driving
+nitrogen into solution in the blood and tissues.  On ascent, the ambient
+pressure drops and the dissolved nitrogen becomes supersaturated.  If
+the supersaturation is too large, nitrogen comes out of solution as
+bubbles, potentially causing decompression sickness (DCS).
+
+The engineering problem is: given a time-depth profile, predict whether
+the dissolved nitrogen in any body tissue will exceed a safe
+supersaturation limit at any point during or after ascent.
+
+\subsection{Units and conventions}
+
+All pressures are expressed in \textbf{feet of seawater} (fsw), defined as
+\[
+  1\;\text{fsw} = \frac{1}{33}\;\text{atm} = 3.070\;\text{kPa}.
+\]
+One atmosphere of surface pressure equals $33$~fsw.  The metric unit
+\textbf{msw} (metres of seawater) is defined as $1\;\text{msw} = \tfrac{1}{10}\;\text{bar} = 10\;\text{kPa}$.
+The conversion is
+$1\;\text{msw} = 3.2568\;\text{fsw}$
+(Hamilton et al.\ 1994, p.~8).
+
+\textbf{Absolute pressure} at gauge depth $d$ (fsw):
+\begin{equation}
+  P_{\mathrm{amb}} = d + 33 \quad (\text{fsw}).
+  \label{eq:pamb}
+\end{equation}
+
+\subsection{Gas composition}
+
+The DSAT model treats air as $79.1\%$ nitrogen by volume.  The inspired
+nitrogen partial pressure at ambient pressure $P_{\mathrm{amb}}$ is
+\begin{equation}
+  P_i = f_{\mathrm{N}_2} \cdot P_{\mathrm{amb}},
+  \qquad f_{\mathrm{N}_2} = 0.791.
+  \label{eq:pi}
+\end{equation}
+
+\begin{remark}[No water-vapor correction]
+Unlike the B\"uhlmann ZH-L16 model, the DSAT algorithm does \emph{not}
+subtract alveolar water-vapor pressure before computing $P_i$.  The report
+states: ``exchange is between the compartments and the ambient atmosphere
+\ldots that factor is not used'' (Hamilton et al., p.~13).  This is
+self-consistent because the $M_0$ values were back-calculated under the
+same convention.
+\end{remark}
+
+\begin{remark}[Historical note on the nitrogen fraction]
+Haldane (1908) and the original USN tables treated air as $100\%$ nitrogen
+to simplify hand calculation.  The $M$-values were scaled accordingly, so
+the ratio-based ascent limits gave the same answer.  Rogers adopted the
+modern convention of using the true nitrogen fraction $0.791$ with
+correspondingly lower $M$-values (Hamilton et al., pp.~13--14, 21--22).
+\end{remark}
+
+
+% ==================================================================
+\section{The Haldane Compartment Model}
+% ==================================================================
+
+\subsection{Parallel perfusion-limited compartments}
+
+The body is modeled as $N=14$ independent, parallel compartments, each
+exchanging nitrogen with the lungs at a rate determined by a single
+\textbf{half-time} $t_{1/2}$.  A compartment is not an anatomical structure;
+it represents all tissues in the body that happen to equilibrate on a
+similar timescale.
+
+\subsection{Gas loading at constant depth (Haldane equation)}
+
+Let $P_0$ be the nitrogen partial pressure in a compartment at time $t=0$,
+and $P_i$ the constant inspired nitrogen pressure.  The compartment
+loading at time $t$ is
+\begin{equation}
+  \boxed{
+  P(t) = P_0 + (P_i - P_0)\bigl(1 - e^{-kt}\bigr)
+  }
+  \label{eq:haldane}
+\end{equation}
+where the time constant is
+\begin{equation}
+  k = \frac{\ln 2}{t_{1/2}}.
+  \label{eq:k}
+\end{equation}
+
+\textbf{Physical justification.}  Equation~\eqref{eq:haldane} is the
+solution to the first-order ODE
+\[
+  \frac{dP}{dt} = k\,(P_i - P),
+\]
+which states that the rate of gas exchange is proportional to the partial
+pressure gradient between the inspired gas and the tissue.  This is the
+defining assumption of a \emph{perfusion-limited} model: blood flow
+(perfusion) is the rate-limiting step, not diffusion within tissue.  The
+exponential approach to equilibrium is a direct consequence.
+
+\textbf{Key property:} After one half-time, $50\%$ of the pressure difference
+has been absorbed.  After six half-times, $98.4\%$---the compartment is
+considered saturated.
+
+\subsection{Gas loading during linear pressure change (Schreiner equation)}
+
+During descent or ascent at a constant rate, the ambient pressure changes
+linearly and so does $P_i(t) = P_i(0) + Rt$, where $R = f_{\mathrm{N}_2}
+\times (\text{depth rate in fsw/min})$.  The Haldane ODE becomes
+\[
+  \frac{dP}{dt} = k\bigl(P_i(0) + Rt - P\bigr),
+\]
+which has the closed-form solution (Schreiner and Kelley, 1971):
+\begin{equation}
+  \boxed{
+  P(t) = P_i(0) + R\!\left(t - \frac{1}{k}\right)
+       - \left[P_i(0) - P_0 - \frac{R}{k}\right] e^{-kt}
+  }
+  \label{eq:schreiner}
+\end{equation}
+This is used to model finite-rate descent ($R > 0$) and ascent ($R < 0$).
+
+\subsection{Compartment parameters}
+
+The 14 DSAT half-times and their corresponding surfacing $M$-values
+($M_0$, in fsw) are given in Table~\ref{tab:params}.  These are taken
+directly from Table~III of Hamilton et al.\ (1994), ``RDP'' column.
+
+\begin{table}[h]
+\centering
+\caption{DSAT compartment parameters (Hamilton et al.\ 1994, Table~III).}
+\label{tab:params}
+\begin{tabular}{@{}rrc@{}}
+\toprule
+Compartment & $t_{1/2}$ (min) & $M_0$ (fsw) \\
+\midrule
+ 1 &   5 & 99.08 \\
+ 2 &  10 & 82.63 \\
+ 3 &  20 & 66.89 \\
+ 4 &  30 & 59.74 \\
+ 5 &  40 & 55.73 \\
+ 6 &  60 & 51.44 \\
+ 7 &  80 & 49.21 \\
+ 8 & 100 & 47.85 \\
+ 9 & 120 & 46.93 \\
+10 & 160 & 45.78 \\
+11 & 200 & 45.07 \\
+12 & 240 & 44.60 \\
+13 & 360 & 43.81 \\
+14 & 480 & 43.40 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+% ==================================================================
+\section{Ascent Limits: $M_0$ Values}
+% ==================================================================
+
+\subsection{The concept of $M$-values}
+
+An $M$-value (Workman, 1965) is the maximum tolerable inert-gas partial
+pressure in a compartment at a given ambient pressure.  For no-stop
+(no-decompression) diving, only the \textbf{surfacing} $M$-value, $M_0$,
+matters: it is the maximum nitrogen loading that a compartment may
+carry when the diver surfaces to 1~atm ($33$~fsw ambient).
+
+If any compartment's loading $P_i > M_{0,i}$ at the surface, the model
+predicts an unacceptable risk of DCS.  For no-stop planning, the diver
+must surface before any compartment reaches its $M_0$.
+
+\subsection{How the DSAT $M_0$ values were derived}
+\label{sec:m0derivation}
+
+The DSAT $M_0$ values were \emph{not} chosen from first principles or from
+a physiology-based bubble model.  The derivation, stated explicitly in the
+report (Hamilton et al., pp.~20--21), was:
+
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{Empirical NDLs from Doppler data.}
+    Spencer (1976) measured Doppler-detectable circulating bubbles in divers
+    after no-stop dives at various depths and times.  He proposed that a
+    decompression would be acceptable if no more than $\sim\!20\%$ of
+    divers produced detectable bubbles.
+
+  \item \textbf{Power-law smoothing.}
+    Rogers fitted the Spencer-adjusted NDLs to a smooth depth--time curve
+    of the Hempleman form:
+    \begin{equation}
+      D - A = C\, t^x,
+      \label{eq:nostop_curve}
+    \end{equation}
+    where $D$ is gauge depth (fsw), $t$ is allowable time (min),
+    $A = 20.15$~fsw (the shallow asymptote---the shallowest depth at which
+    a diver could saturate and still require a stop), $C = 510$, and
+    $x = -0.53$ (nearly a square-root law).  This was set slightly
+    more conservative than Spencer's suggestion.
+
+  \item \textbf{Back-calculation of $M_0$.}
+    For each compartment $i$, the $M_0$ value was determined by asking:
+    ``What nitrogen loading would compartment $i$ have if the diver
+    descended at 60~fsw/min and remained at the depth where compartment
+    $i$ is controlling for exactly the NDL given by the smoothed curve?''
+    Solving the Haldane equation forward from surface saturation to the
+    NDL time and reading off $P(t_{\mathrm{NDL}})$ gives $M_{0,i}$.
+\end{enumerate}
+
+\begin{remark}[The causal arrow]
+The $M_0$ values are \emph{derived quantities}, not primitive inputs.
+The primary data are the empirical NDLs.  This was confirmed by
+Dr.~Michael Powell (co-developer of the RDP) on ScubaBoard (2008):
+``One uses the NDLs to calculate a `limiting' halftime for each of
+these depths \ldots\ The $M_0$-values will depend on the smoothed NDL
+curve.''
+\end{remark}
+
+
+% ==================================================================
+\section{No-Decompression Limit Calculation}
+% ==================================================================
+
+\subsection{NDL for a single compartment}
+
+Given inspired pressure $P_i$, initial loading $P_0$, and surfacing limit
+$M_{0}$, solve $P(t) = M_0$ in~\eqref{eq:haldane} for $t$:
+\begin{equation}
+  \boxed{
+  t_{\mathrm{NDL}} = t_{1/2}\, \log_2\!\left(\frac{P_i - P_0}{P_i - M_0}\right)
+  }
+  \label{eq:ndl}
+\end{equation}
+This is valid only when $P_i > M_0$ (the compartment can actually reach
+its limit at this depth).  If $P_i \le M_0$, the compartment can never
+exceed its limit at this depth, so its NDL is infinite.
+
+\subsection{NDL for the full model}
+
+The overall NDL is the \emph{minimum} across all 14 compartments:
+\[
+  \mathrm{NDL}(d) = \min_{i=1}^{14}\; t_{\mathrm{NDL},i}(d).
+\]
+The compartment achieving the minimum is called the
+\textbf{controlling compartment}.  As depth increases, the controlling
+compartment shifts from slow (large $t_{1/2}$) to fast (small $t_{1/2}$)
+compartments.
+
+\subsection{Initial conditions}
+
+For a clean (first dive of the day) diver, all compartments are at
+surface-equilibrium nitrogen pressure:
+\[
+  P_0 = f_{\mathrm{N}_2} \times P_{\text{surface}} = 0.791 \times 33 = 26.10\;\text{fsw}.
+\]
+For a repetitive dive, $P_0$ for each compartment is the residual loading
+from the previous dive(s) after the surface interval.
+
+
+% ==================================================================
+\section{Repetitive Diving}
+% ==================================================================
+
+\subsection{Motivation}
+
+After surfacing from a dive, nitrogen continues to off-gas.  A second dive
+started before full equilibration begins with elevated tissue loadings,
+reducing the available NDL.  The RDP tracks this via pressure groups and
+the surface-interval washout model.
+
+\subsection{Pressure groups}
+
+The excess nitrogen in the \textbf{60-minute compartment} (compartment 6,
+$t_{1/2} = 60$~min) above surface equilibrium is divided into 26 equal
+bins labeled A through Z.  The maximum possible excess is
+$M_{0,6} - P_{\text{surface}} \cdot f_{\mathrm{N}_2} = 51.44 - 26.10 = 25.34$~fsw.
+Each pressure-group bin spans $25.34/26 \approx 0.975$~fsw.
+
+\textbf{Why the 60-minute compartment?}
+The USN tables used the 120-minute compartment for repetitive groups, which
+was appropriate for decompression diving.  Rogers argued that for no-stop
+recreational dives (which never load the slow compartments to their limits),
+the 60-minute compartment better captures the relevant gas dynamics and
+provides more efficient surface-interval credit (Hamilton et al., pp.~16--17, 22).
+
+\subsection{Surface washout rule}
+
+During a surface interval, all compartments off-gas toward the surface
+equilibrium pressure.  The DSAT model applies a special rule:
+
+\begin{quote}
+\emph{At the surface, all compartments with $t_{1/2} \le 60$~min wash out
+at the 60-minute rate.  Compartments with $t_{1/2} > 60$~min wash out at
+their own (slower) rate.}
+\end{quote}
+
+Mathematically, during a surface interval of duration $t_s$:
+\begin{equation}
+  P_i^{\text{after}} = P_{\text{eq}} + (P_i^{\text{before}} - P_{\text{eq}})
+    \cdot 2^{-t_s / t_{1/2}^{\text{eff}}},
+  \label{eq:washout}
+\end{equation}
+where $P_{\text{eq}} = 0.791 \times 33 = 26.10$~fsw and
+\[
+  t_{1/2}^{\text{eff}} =
+  \begin{cases}
+    60 & \text{if } t_{1/2} \le 60\;\text{min}, \\
+    t_{1/2} & \text{if } t_{1/2} > 60\;\text{min}.
+  \end{cases}
+\]
+
+\textbf{Physical justification.}
+This is a conservative modeling choice, not a physiological law.
+Capping fast-compartment washout at the 60-minute rate prevents the model
+from crediting rapid off-gassing in short surface intervals---a regime
+where the Haldane exponential model is known to be less reliable and where
+bubble dynamics (not captured by the model) may delay off-gassing.  The
+rule was validated empirically in the Phase~I and Phase~II test series
+(Hamilton et al., Chs.~IV--V).
+
+\subsection{Repetitive dive NDL}
+
+A repetitive dive is simply a standard NDL calculation
+(Eq.~\ref{eq:ndl}) with modified initial loadings $P_0$ reflecting
+the residual nitrogen from prior dives.  No special formula is needed;
+the full compartment state carries all the information.
+
+
+% ==================================================================
+\section{Dive Profile Modeling}
+% ==================================================================
+
+\subsection{Complete dive profile}
+
+A square dive profile consists of:
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{Descent} at 60~fsw/min from surface to depth $d$,
+        modeled with the Schreiner equation~\eqref{eq:schreiner}
+        ($R = f_{\mathrm{N}_2} \times 60$).
+  \item \textbf{Bottom time} at constant depth $d$, modeled with
+        the Haldane equation~\eqref{eq:haldane}.
+        Total bottom time is measured from start of descent to
+        start of final ascent.
+  \item \textbf{Safety stop} at 15~fsw (5~m) for 3~minutes (recommended
+        on all dives; required near NDL or below 100~fsw).
+  \item \textbf{Ascent} at 30~fsw/min (9~m/min) to the surface,
+        modeled with the Schreiner equation ($R < 0$).
+\end{enumerate}
+
+\subsection{Bottom time definition}
+
+``Bottom time is the total time in minutes from the beginning of descent
+until the beginning of final ascent'' (PADI RDP instructions).  Descent
+time is included; ascent time and safety-stop time are not.
+
+
+% ==================================================================
+\section{Published Table NDLs vs.\ Model Output}
+% ==================================================================
+
+When the model is evaluated at published table depths with a clean diver,
+the computed NDLs agree with the published PADI RDP to within a few
+minutes at most depths, but with a systematic pattern of residuals:
+
+\begin{center}
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+Depth & Published & Calculated & Diff & Controlling \\
+(msw) & NDL (min) & NDL (min) & (min) & compartment \\
+\midrule
+10 & 219 & 262 & $+43$ & \#7 (80 min) \\
+12 & 147 & 148 & $+1$  & \#6 (60 min) \\
+14 &  98 &  99 & $+1$  & \#5 (40 min) \\
+18 &  56 &  56 & $\phantom{+}0$ & \#4 (30 min) \\
+22 &  37 &  37 & $\phantom{+}0$ & \#3 (20 min) \\
+25 &  29 &  29 & $\phantom{+}0$ & \#3 (20 min) \\
+30 &  20 &  19 & $-1$  & \#2 (10 min) \\
+35 &  14 &  12 & $-2$  & \#1 (5 min)  \\
+40 &   9 &   9 & $\phantom{+}0$ & \#1 (5 min)  \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The 10~msw outlier (published 219 vs.\ calculated 262) is a practical cap;
+219 minutes ($\sim\!3.6$ hours) already exceeds realistic air supply.
+
+The remaining residuals (conservative at shallow depths, slightly generous
+at deep depths) are the signature of the empirical smoothing described in
+Section~\ref{sec:m0derivation}.  The $M_0$ values were back-calculated
+from a smooth NDL curve, so round-tripping (forward-computing NDLs from
+the back-fitted $M_0$ values) does not reproduce the curve exactly because
+the controlling compartment changes with depth.
+
+\begin{remark}[Independent verification]
+An independent implementer (``likedonuts'' on ScubaBoard, 2008) obtained
+the same calculated NDLs to within rounding.  Dr.~Michael Powell confirmed
+in the same thread that the discrepancies are due to curve smoothing by
+Dr.~Rogers.
+\end{remark}
+
+
+% ==================================================================
+\section{Safety Margins and Limitations}
+% ==================================================================
+
+\subsection{What the model does not capture}
+
+The Haldane model is a dissolved-gas bookkeeping system, not a physiological
+simulation.  It does not model:
+\begin{itemize}[nosep]
+  \item Bubble formation, growth, or transport
+  \item Venous-to-arterial shunting (e.g., via patent foramen ovale)
+  \item Tissue-specific blood flow variations with exercise or temperature
+  \item Individual physiological variability
+  \item Counter-diffusion effects (irrelevant for single-gas air diving)
+\end{itemize}
+
+\subsection{WXYZ rules}
+
+For multi-day or intensive diving, the RDP imposes additional constraints:
+if the ending pressure group after any dive is W or X, the minimum surface
+interval before all subsequent dives is 1 hour; if Y or Z, the minimum
+is 3 hours.  These rules protect slower compartments that the 60-minute
+pressure-group system does not track directly.
+
+\subsection{Conservatism}
+
+The model embeds conservatism at multiple levels: Spencer's Doppler-based
+NDL reductions below USN limits; the 60-minute surface washout cap; the
+required safety stop; and the WXYZ rules.  Despite this, DCS can never be
+completely eliminated---only made acceptably improbable (Hamilton et al.,
+pp.~8--9).
+
+
+% ==================================================================
+\section{Summary of the Algorithm}
+% ==================================================================
+
+\begin{enumerate}[label=\textbf{Step \arabic*:}]
+  \item \textbf{Initialize.}  Set all 14 compartment loadings to
+    $P_0 = 0.791 \times 33 = 26.10$~fsw.
+
+  \item \textbf{Descent.}  Apply Schreiner equation~\eqref{eq:schreiner}
+    with $R = 0.791 \times 60 = 47.46$~fsw/min for time
+    $t_d = d/60$ minutes.
+
+  \item \textbf{Bottom.}  Apply Haldane equation~\eqref{eq:haldane}
+    at constant $P_i = 0.791 \times (d + 33)$ for time
+    $t_b = (\text{bottom time}) - t_d$.
+
+  \item \textbf{Ascent / safety stop.}  Apply Schreiner equation with
+    $R < 0$ at 30~fsw/min, including 3~min hold at 15~fsw.
+
+  \item \textbf{NDL check.}  Before the dive, verify that the planned
+    bottom time does not exceed the NDL (Eq.~\ref{eq:ndl}) for any
+    compartment.
+
+  \item \textbf{Pressure group.}  Read the 60-minute compartment loading
+    and assign a letter A--Z.
+
+  \item \textbf{Surface interval.}  Apply washout (Eq.~\ref{eq:washout})
+    with the 60-min cap rule.
+
+  \item \textbf{Repeat} from Step~2 for subsequent dives.
+\end{enumerate}
+
+
+% ==================================================================
+\section*{References}
+% ==================================================================
+
+\begin{description}[style=nextline,leftmargin=0pt,font=\normalfont]
+
+\item[Hamilton RW, Rogers RE, Powell MR, Vann RD (1994)]
+  \emph{Development and validation of no-stop decompression procedures
+  for recreational diving: The DSAT Recreational Dive Planner.}
+  Santa Ana, CA: Diving Science and Technology Corp.
+
+\item[Spencer MP (1976)]
+  Decompression limits for compressed air determined by ultrasonically
+  detected blood bubbles.
+  \emph{J.\ Appl.\ Physiol.}\ 40(2):229--235.
+
+\item[Workman RD (1965)]
+  Calculation of decompression schedules for nitrogen-oxygen and
+  helium-oxygen dives.  Research Report 6-65.
+  Washington: Navy Experimental Diving Unit.
+
+\item[Schreiner HR, Kelley PL (1971)]
+  A pragmatic view of decompression.
+  In: Lambertsen CJ, ed.\ \emph{Underwater Physiology IV.}
+  New York: Academic Press.
+
+\item[Hempleman HV (1975)]
+  Decompression procedures for deep, open sea operations.
+  In: \emph{Proc.\ 4th Symp.\ Underwater Physiology.}
+  New York: Academic Press.
+
+\item[Baker EC]
+  Calculating no stop time for scuba diving.
+  Available at: scubatechphilippines.com.
+
+\item[Baker EC]
+  Understanding $M$-values.
+  Available at: scubatechphilippines.com.
+
+\end{description}
+
+\end{document}
