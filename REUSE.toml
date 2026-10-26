@@ -1,0 +1,16 @@
+# SPDX / REUSE metadata for the files currently tracked in this repository.
+# The full license allocation and third-party exclusions are in LICENSE.
+version = 1
+
+[[annotations]]
+path = ["README.md", "**/*.md", "**/*.tex"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Christopher D. Long"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = ["**/*.py", "**/*.yml", "**/*.yaml", "**/*.json", ".gitignore", "tests/fixtures/*.csv"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 Christopher D. Long"
+SPDX-License-Identifier = "Apache-2.0"
+SPDX-FileComment = "Applies to original copyrightable contributions only; does not relicense third-party source data, materials, or independent rights. Refer to LICENSE."
