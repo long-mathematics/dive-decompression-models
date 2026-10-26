@@ -1,0 +1,467 @@
+
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible
+}
+
+\title{A disciplined reconstruction of the 1994 DSAT Recreational Dive Planner model}
+\author{Prepared from the uploaded report and supporting notes}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note reconstructs the \emph{core} 1994 DSAT Recreational Dive Planner (RDP) model from the report
+\emph{Development and validation of no-stop decompression procedures for recreational diving: The DSAT Recreational Dive Planner} by Hamilton, Rogers, Powell, and Vann. The aim is not to defend the RDP as a life-critical device, but to separate clearly the layers that are often conflated: the native first-dive no-stop model, the 14-compartment parameterization, the repetitive-diving display layer, the multilevel restrictions, and the later flat-table / Wheel presentation layers. The resulting reconstruction yields a fully documented Python implementation for multiple dives. Whenever the report states a rule explicitly, that rule is implemented as stated. Whenever the report gives only a verbal description, the reconstruction is labeled as such and justified mathematically.
+\end{abstract}
+
+\section{Purpose and scope}
+
+The report itself states that the project goals were to produce recreational no-stop tables, repetitive procedures for no-stop dives, procedures for multilevel dives, presentation both as flat tables and as ``The Wheel,'' and validation with human volunteers \cite[p.~19]{Hamilton1994}. This already shows that the DSAT RDP is not merely a copy of the U.S. Navy tables. It is a distinct computational model aimed at recreational no-stop diving.
+
+The present reconstruction has four aims:
+\begin{enumerate}[label=\arabic*.]
+\item recover the native first-dive no-stop model in feet of seawater (fsw);
+\item recover the final 14-compartment half-times and surfacing $M_0$ values used by DSAT;
+\item recover the repetitive-diving and multilevel display layers as far as they are explicitly specified in the report;
+\item isolate remaining ambiguities in the printed flat-table and metric presentation layers.
+\end{enumerate}
+
+The reconstruction is intentionally conservative in one methodological sense: whenever the report distinguishes the native model from the printed table, we keep them distinct instead of smoothing over the difference.
+
+\section{Page-by-page extraction of the model section}
+
+\subsection{Page 19: objectives of the RDP model}
+
+On page 19, under ``Development of the RDP model,'' the report states that the objectives were:
+\begin{itemize}
+\item recreational no-stop diving tables,
+\item repetitive procedures for no-stop dives,
+\item procedures for multilevel dives,
+\item presentation as standard tables and as ``The Wheel,''
+\item validation with human volunteers and a report of the results.
+\end{itemize}
+This is the conceptual scope of the model \cite[p.~19]{Hamilton1994}.
+
+\subsection{Page 20: first-dive no-stop limits}
+
+Page 20 first explains that the U.S. Navy no-stop table has irregularities due mainly to rounding in $5$-minute increments, and that Rogers sought a smoother depth--time curve \cite[p.~20]{Hamilton1994}. The report first reviews the simpler ``$P$ root'' form
+\[
+C = D \sqrt{t},
+\]
+or more generally $D = C t^{-x}$, and then states that Spencer-based Doppler adjustments were used to choose a conservative curve fit.
+
+The key explicit native RDP formula on page 20 is
+\begin{equation}
+D - A = C t^{-x},
+\label{eq:DSATcurve}
+\end{equation}
+with
+\[
+A = 20.15\ \text{fsw}, \qquad C = 803, \qquad x = 0.7476.
+\]
+The report calls $A$ a \emph{shallow asymptote} and notes also a deep asymptote of $262$ fsw for completeness \cite[p.~20]{Hamilton1994}.
+
+Thus the native first-dive no-stop function is
+\begin{equation}
+t(D) = \left(\frac{803}{D-20.15}\right)^{1/0.7476},
+\qquad D > 20.15.
+\label{eq:curveinverse}
+\end{equation}
+
+Table II on the same page lists the resulting RDP no-stop values at selected depths:
+\[
+40\mapsto 140,\;
+50\mapsto 80,\;
+60\mapsto 55,\;
+70\mapsto 40,\;
+80\mapsto 30,\;
+90\mapsto 25,\;
+100\mapsto 20,\;
+110\mapsto 17,\;
+120\mapsto 14,\;
+130\mapsto 12.
+\]
+These anchor values are close to, but not exactly equal to, the raw continuous curve evaluated at those depths. This already shows that one must distinguish the fitted continuous model from the displayed table values \cite[p.~20]{Hamilton1994}.
+
+\subsection{Pages 20--21: final RDP half-times and $M_0$ values}
+
+The report explains that the classical U.S. Navy half-times were
+\[
+5,\ 10,\ 20,\ 40,\ 80,\ 120\ \text{min},
+\]
+and that additional values were inserted to smooth the curve and to accommodate repetitive and multilevel logic. The final set is
+\begin{equation}
+5,\ 10,\ 20,\ 30,\ 40,\ 60,\ 80,\ 100,\ 120,\ 160,\ 200,\ 240,\ 360,\ 480
+\label{eq:halftimes}
+\end{equation}
+minutes \cite[pp.~20--21]{Hamilton1994}.
+
+Page 21 then gives the central conceptual point that is often missed: the RDP $M_0$ values were \emph{back-calculated from the smoothed no-stop curve}. The report says this explicitly:
+\begin{quote}
+``The RDP $M_0$-values were back-calculated from the no-stop curve.'' \cite[p.~21]{Hamilton1994}
+\end{quote}
+So the development order is:
+\[
+\text{smoothed no-stop curve} \longrightarrow \text{chosen half-times} \longrightarrow \text{derived } M_0\text{-values}.
+\]
+
+Table III then lists the final RDP $M_0$ values (RDP column) associated with the half-times in \eqref{eq:halftimes}:
+\begin{equation}
+\begin{aligned}
+&99.08,\ 82.63,\ 66.89,\ 59.74,\ 55.73,\ 51.44,\ 49.21,\\
+&47.85,\ 46.93,\ 45.78,\ 45.07,\ 44.60,\ 43.81,\ 43.40
+\end{aligned}
+\label{eq:m0}
+\end{equation}
+in fsw-equivalent inert-gas pressure \cite[p.~21]{Hamilton1994}.
+
+The same page also states that these $M_0$ values were calculated assuming a timed descent at $60$ fsw/min beginning at the beginning of bottom time, \emph{not} an instantaneous square descent \cite[p.~21]{Hamilton1994}. This matters because it explains why a simple legacy square-profile reconstruction can be numerically close without being the same model.
+
+Page 21 also mentions the ``0.79 vs.\ 0.791'' issue. The report says that the Table III values are shown ``in the modern perspective'' that treats the atmosphere as $79.1\%$ nitrogen \cite[p.~21]{Hamilton1994}. This is the explicit numerical convention the present reconstruction adopts.
+
+\subsection{Page 22: repetitive diving and multilevel diving}
+
+For repetitive diving, page 22 states that the RDP uses a scheme similar to the U.S. Navy approach, but with two key modifications:
+\begin{enumerate}[label=(\alph*)]
+\item the limiting half-time for repetitive diving is shortened from $120$ min to $60$ min;
+\item possible excess gas loading is divided into $26$ groups using the entire alphabet, rather than $16$ groups.
+\end{enumerate}
+The report says the $60$-minute choice was arrived at by iterative calculations using the entire half-time set and the $M$-values, and that the earlier $40$-minute choice was not limiting enough for a sequence of long shallow dives \cite[p.~22]{Hamilton1994}.
+
+The report also states that RDP values are displayed to the nearest minute rather than in $5$-minute increments \cite[p.~22]{Hamilton1994}.
+
+For multilevel diving, page 22 says that the $M$-values derived from the no-stop limits were used to limit multilevel diving in a manner similar to repetitive diving, and that the groups were defined by iterative calculations. It then gives Table IV, the explicit range limits on the next level:
+\[
+140\text{--}120 \to 80,\quad
+110\text{--}95 \to 70,\quad
+90\text{--}80 \to 60,\quad
+75\text{--}65 \to 50,\quad
+60\text{--}50 \to 40.
+\]
+These limits prevent the next level from being impractically close to the previous one \cite[p.~22]{Hamilton1994}.
+
+The same page states that:
+\begin{itemize}
+\item all depths after the first must be shallower than the previous depth,
+\item calculations provide at least $5$ minutes at any subsequent level,
+\item ascent times are not included in time spent at a given level.
+\end{itemize}
+These rules are explicit and therefore should be implemented as such \cite[p.~22]{Hamilton1994}.
+
+\subsection{Page 23: altitude, flying after diving, and The Wheel}
+
+Page 23 states that the RDP does not calculate directly for either flying after diving or diving at altitude. The planner is said to be usable to $1000$ ft, with RDP-specific corrections for larger altitude \cite[p.~23]{Hamilton1994}. The present reconstruction therefore excludes altitude and flying-after-diving computation on purpose.
+
+The same page clarifies that ``RDP'' strictly refers to the computational method, whereas ``The Wheel'' is one implementation. The flat table and The Wheel are said to produce the same RDP results, but the flat table is limited to $10$ fsw depth increments and fixed times, while The Wheel provides a continuous linked sequence of multilevel and repetitive dives \cite[p.~23]{Hamilton1994}.
+
+Page 23 also gives the operational overlay rules:
+\begin{itemize}
+\item exceed table bottom time by at most $5$ min $\Rightarrow$ stop $8$ min at $15$ fsw and remain out of the water for $6$ h;
+\item exceed by more than $5$ min $\Rightarrow$ stop $15$ min at $15$ fsw and no diving for $24$ h;
+\item safety stop: $3$ min at $15$ fsw for any dive to $100$ fsw or greater, and when within $3$ pressure groups of a no-stop limit.
+\end{itemize}
+These are display/usage rules, not part of the core decompression computation \cite[p.~23]{Hamilton1994}.
+
+\section{Mathematical reconstruction}
+
+\subsection{State variables}
+
+We work in feet of seawater (fsw). Let
+\[
+P_\mathrm{surf} = 33\ \text{fsw}
+\]
+be surface ambient pressure, and let
+\[
+f_{N_2} = 0.791
+\]
+be the nitrogen fraction from page 21 of the report \cite[p.~21]{Hamilton1994}. The surface-equilibrium nitrogen pressure is
+\begin{equation}
+P_{N_2}^{\mathrm{surf}} = f_{N_2} P_\mathrm{surf} = 0.791 \cdot 33.
+\label{eq:surfaceeq}
+\end{equation}
+
+Each compartment is represented by its nitrogen-equivalent tension $P_i$ in fsw-equivalent pressure.
+
+\subsection{Constant-depth loading}
+
+For constant depth $D$ fsw, the inspired nitrogen-equivalent pressure is
+\begin{equation}
+P_{N_2}^{\mathrm{insp}}(D) = f_{N_2}(33 + D).
+\label{eq:pinsp}
+\end{equation}
+
+With half-time $T_{1/2,i}$, define
+\begin{equation}
+k_i = \frac{\ln 2}{T_{1/2,i}}.
+\label{eq:ki}
+\end{equation}
+Then the Haldane constant-depth update is
+\begin{equation}
+P_i(t) = P_{N_2}^{\mathrm{insp}} + \bigl(P_i(0)-P_{N_2}^{\mathrm{insp}}\bigr)e^{-k_i t}.
+\label{eq:haldane}
+\end{equation}
+This is standard Haldane compartment kinetics \cite{NoStopMemo,ChapmanZH}.
+
+\subsection{Linear travel segments}
+
+For descent or ascent at constant rate, we use the Schreiner equation. If
+\[
+P_{N_2}^{\mathrm{insp}}(t)=P_{N_2}^{\mathrm{insp}}(0)+Rt,
+\]
+then
+\begin{equation}
+P_i(t)=P_{N_2}^{\mathrm{insp}}(0)+R\left(t-\frac{1}{k_i}\right)
+-\left(P_{N_2}^{\mathrm{insp}}(0)-P_i(0)-\frac{R}{k_i}\right)e^{-k_i t}.
+\label{eq:schreiner}
+\end{equation}
+This is the natural formula for linearly changing inspired pressure \cite{ChapmanZH}. It is used here for timed descents and ascents at the $60$ fsw/min convention mentioned on page 21 of the DSAT report \cite[p.~21]{Hamilton1994}.
+
+\subsection{First-dive no-stop limit}
+
+For a first dive, the \emph{native RDP model} is the curve \eqref{eq:curveinverse}. This is the primary object in the report. It is not merely an approximation to a pre-existing 14-compartment table; rather, the report says the $M_0$ values were back-calculated from this curve \cite[p.~21]{Hamilton1994}.
+
+Thus the first-dive no-stop time at depth $D$ fsw is
+\[
+t_{\mathrm{curve}}(D)
+=
+\left(\frac{803}{D-20.15}\right)^{1/0.7476}.
+\]
+
+\subsection{Direct-ascent diagnostic using the 14-compartment layer}
+
+The report's Table III provides a 14-compartment surfacing-limit layer. This lets one diagnose a profile by asking whether a direct ascent at $60$ fsw/min leads, upon surfacing, to
+\begin{equation}
+P_i^{\mathrm{surface}} \le M_{0,i}
+\qquad\text{for all } i.
+\label{eq:m0criterion}
+\end{equation}
+This criterion is natural once the state has been propagated by \eqref{eq:haldane} and \eqref{eq:schreiner}. For general multilevel or repetitive profiles this layer is extremely useful, even though the report's first-dive no-stop logic is curve-first.
+
+\subsection{Pressure groups}
+
+Page 22 states that possible excess gas loading is divided evenly into $26$ groups using the entire alphabet, and that the repetitive-diving display layer is based on the $60$-minute compartment \cite[p.~22]{Hamilton1994}.
+
+Let
+\[
+P_{60}^{\mathrm{surf}}
+\]
+be the 60-minute compartment tension after surfacing. Its excess loading above surface equilibrium is
+\[
+E = \max\{0,\, P_{60}^{\mathrm{surf}} - P_{N_2}^{\mathrm{surf}}\}.
+\]
+The maximum available excess range is
+\[
+E_{\max}=M_{0,60}-P_{N_2}^{\mathrm{surf}},
+\]
+where $M_{0,60}=51.44$ fsw from Table III \cite[p.~21]{Hamilton1994}. The natural equal-width group size is therefore
+\begin{equation}
+\Delta E = \frac{E_{\max}}{26}.
+\label{eq:groupstep}
+\end{equation}
+A conservative reconstruction of the group index is
+\begin{equation}
+G = \left\lceil \frac{E}{\Delta E}\right\rceil,
+\qquad G\in\{0,1,\dots,26\},
+\label{eq:groupmap}
+\end{equation}
+with $G=0$ meaning ``clean'' and $G=1,\dots,26$ corresponding to $A,\dots,Z$.
+
+This exact formula is \emph{not printed} in the report, but it is the direct mathematical reconstruction of the page-22 statement that possible excess loading is divided evenly into $26$ groups \cite[p.~22]{Hamilton1994}. I therefore classify \eqref{eq:groupmap} as a principled reconstruction rather than a directly quoted rule.
+
+\subsection{Residual nitrogen time}
+
+The repetitive-diving section says that the loading present at the start of the repetitive dive is implemented as a ``residual nitrogen time'' \cite[p.~22]{Hamilton1994}. The natural one-compartment realization is to solve the constant-depth Haldane law for the equivalent time at the next depth.
+
+Let $P_{60}^{\mathrm{start}}$ be the 60-minute compartment tension at the start of the next dive, after the surface interval. At next depth $D$, define
+\[
+P_{N_2}^{\mathrm{insp}}(D)=0.791(33+D).
+\]
+Then the residual nitrogen time $t_{\mathrm{RNT}}$ is defined by
+\[
+P_{60}^{\mathrm{start}}
+=
+P_{N_2}^{\mathrm{insp}}(D)
++
+\bigl(P_{N_2}^{\mathrm{surf}}-P_{N_2}^{\mathrm{insp}}(D)\bigr)e^{-k_{60} t_{\mathrm{RNT}}},
+\]
+hence
+\begin{equation}
+t_{\mathrm{RNT}}
+=
+-\frac{1}{k_{60}}
+\log\!\left(
+\frac{P_{N_2}^{\mathrm{insp}}(D)-P_{60}^{\mathrm{start}}}
+     {P_{N_2}^{\mathrm{insp}}(D)-P_{N_2}^{\mathrm{surf}}}
+\right).
+\label{eq:rnt}
+\end{equation}
+
+Again, \eqref{eq:rnt} is not printed in the report, but it is exactly the one-compartment Haldane inverse corresponding to the verbal description of penalty time on page 22 \cite[p.~22]{Hamilton1994}.
+
+\section{Algorithm}
+
+\subsection{Core state propagation}
+
+The state of the diver is the vector
+\[
+\mathbf{P}=(P_1,\dots,P_{14})
+\]
+of compartment tensions. Initially, on a clean first dive,
+\[
+P_i=P_{N_2}^{\mathrm{surf}}
+\qquad\text{for all }i.
+\]
+
+The program processes a profile as a sequence of events:
+\begin{itemize}
+\item a dive event, itself made of one or more levels $(D_j,t_j)$,
+\item a surface interval event of duration $s$.
+\end{itemize}
+
+Travel between levels and to/from the surface is propagated by the Schreiner update \eqref{eq:schreiner}. Time spent at level is propagated by the Haldane update \eqref{eq:haldane}.
+
+\subsection{Single-level no-stop planning}
+
+For a clean single-level dive, the report's native first-dive no-stop allowance is
+\[
+t_{\mathrm{curve}}(D)
+\]
+from \eqref{eq:curveinverse}. For diagnostic purposes the program also computes the direct-ascent 14-compartment no-stop allowance by root-finding on the condition \eqref{eq:m0criterion}. The comparison between these two values is informative:
+\begin{itemize}
+\item the curve is the report's primary first-dive model;
+\item the 14-compartment value is the direct Table III layer.
+\end{itemize}
+
+\subsection{Repetitive planning}
+
+Suppose a first dive ends at surface state $\mathbf{P}^{(1)}$. The end-of-dive pressure group is assigned using \eqref{eq:groupmap} applied to the 60-minute compartment. A surface interval of length $s$ is then just constant-depth off-gassing at the surface:
+\[
+\mathbf{P}^{(2)} = \Phi_{\mathrm{surf}}(s;\mathbf{P}^{(1)}),
+\]
+again by \eqref{eq:haldane}. The new pressure group is computed from $\mathbf{P}^{(2)}$.
+
+For a next dive to depth $D$, the report's repetitive-display layer is then represented by the residual nitrogen time \eqref{eq:rnt}. A table-style adjusted available time is therefore
+\begin{equation}
+t_{\mathrm{adj}}(D)
+=
+t_{\mathrm{curve}}(D)-t_{\mathrm{RNT}}(D).
+\label{eq:adjusted}
+\end{equation}
+
+\subsection{Multilevel planning}
+
+Page 22 gives explicit next-level guardrails via Table IV and states that every later level must be shallower than the previous one, with at least $5$ min available at any subsequent level and ascent times excluded from time at level \cite[p.~22]{Hamilton1994}. The program enforces those explicit restrictions as warnings.
+
+The actual compartment state is still propagated continuously by \eqref{eq:haldane} and \eqref{eq:schreiner}. This is mathematically natural and provides more transparency than the Wheel graphics, while staying within the report's own compartment-and-$M$-value framework.
+
+\section{What is exact and what is reconstructed}
+
+\subsection{Exact from the report}
+
+The following ingredients are explicit in the report:
+\begin{itemize}
+\item the first-dive no-stop curve \eqref{eq:DSATcurve},
+\item the constants $A=20.15$, $C=803$, $x=0.7476$,
+\item the final 14 half-times,
+\item the Table III RDP $M_0$ values,
+\item the timed $60$ fsw/min descent convention used in the $M_0$ calculation,
+\item the choice of the 60-minute compartment for repetitive diving,
+\item the use of 26 pressure groups A--Z,
+\item the Table IV multilevel restrictions,
+\item the exclusion of direct altitude/flying computation from the flat RDP.
+\end{itemize}
+
+\subsection{Principled reconstructions}
+
+The following formulas are principled reconstructions from the report's verbal descriptions:
+\begin{itemize}
+\item the exact pressure-group boundary formula \eqref{eq:groupmap},
+\item the explicit residual nitrogen time formula \eqref{eq:rnt}.
+\end{itemize}
+These are the natural Haldane one-compartment formulas consistent with page 22, but the report does not typeset them algebraically.
+
+\subsection{Deliberate non-goals}
+
+The exact printed metric-card artifacts, every flat-table rounding convention, and the physical Wheel layout are not reconstructed here. The report distinguishes the computational method from its flat-table and Wheel implementations \cite[p.~23]{Hamilton1994}. The present goal is to reconstruct the core model faithfully enough for mathematical audit.
+
+\section{Sanity checks}
+
+The accompanying Python file includes a self-test. When the continuous first-dive curve \eqref{eq:curveinverse} is compared with the Table II anchor values, the errors are small but not zero. This confirms that the printed anchor values are not simply the raw curve with no display layer.
+
+The code also compares the direct-ascent 14-compartment clean-dive no-stop values against the curve at the Table II depths. The 14-compartment values become progressively more conservative than the curve as depth increases. This is entirely consistent with the report's statement that the $M_0$ values were back-calculated from the curve, rather than the curve being a mere interpolation of the 14-compartment direct-ascent values \cite[p.~21]{Hamilton1994}.
+
+\section{Explanation of the provided Python implementation}
+
+The companion file \texttt{dsat1994\_planner.py} implements:
+\begin{enumerate}[label=\arabic*.]
+\item \textbf{The native first-dive DSAT curve.}
+\item \textbf{Continuous state propagation} of all 14 compartments through dives and surface intervals using Haldane and Schreiner updates.
+\item \textbf{A direct-ascent diagnostic} against the Table III $M_0$ limits.
+\item \textbf{The RDP repetitive display layer} using the 60-minute compartment and 26 pressure groups.
+\item \textbf{Residual nitrogen time} at a chosen next depth.
+\item \textbf{Table IV multilevel restrictions} as explicit warnings.
+\item \textbf{A JSON profile format} for planning multiple dives.
+\end{enumerate}
+
+An example profile file is also provided.
+
+\section{Conclusions}
+
+The report is detailed enough to reconstruct the native 1994 DSAT RDP model to a high degree of fidelity in its native imperial form. The most important conceptual correction is that the first-dive RDP model is \emph{curve-first}, not ``legacy 14-compartment square-profile first.'' The 14-compartment layer is still essential, but in the report it is downstream of the smoothed no-stop curve.
+
+For a mathematically disciplined audit, one should therefore keep the following layers distinct:
+\begin{enumerate}[label=\arabic*.]
+\item the native first-dive no-stop curve;
+\item the 14-compartment Table III $M_0$ layer;
+\item the 60-minute repetitive-display layer;
+\item the multilevel restrictions;
+\item the flat-table and Wheel presentation layers.
+\end{enumerate}
+
+That separation is exactly what the accompanying implementation does.
+
+\begin{thebibliography}{9}
+
+\bibitem{Hamilton1994}
+R. W. Hamilton, R. E. Rogers, M. R. Powell, and R. D. Vann,
+\emph{Development and validation of no-stop decompression procedures for recreational diving: The DSAT Recreational Dive Planner},
+Diving Science and Technology / Hamilton Research, 1994.
+Used throughout, especially pp.~19--23 for the model extraction.
+
+\bibitem{NoStopMemo}
+``The following is an explanation about calculating the `No Stop Time',''
+uploaded note \texttt{Nostop.pdf}.
+Used for the standard constant-depth Haldane inverse formula and its domain restrictions.
+
+\bibitem{ChapmanZH}
+Paul Chapman,
+\emph{An explanation of Professor A. A. B{\"u}hlmann's ZH-L16 algorithm},
+uploaded note \texttt{ZH-L16.pdf}.
+Used for the standard Haldane and Schreiner update formulas and general compartment-model notation.
+
+\end{thebibliography}
+
+\end{document}
