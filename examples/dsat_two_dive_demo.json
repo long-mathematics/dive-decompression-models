@@ -1,0 +1,8 @@
+{
+  "note": "Synthetic research example, not for dive planning.",
+  "events": [
+    {"type": "dive", "name": "Synthetic 1", "levels": [{"depth_fsw": 60, "time_min": 25}]},
+    {"type": "surface_interval", "time_min": 90},
+    {"type": "dive", "name": "Synthetic 2", "levels": [{"depth_fsw": 40, "time_min": 20}]}
+  ]
+}
