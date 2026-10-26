@@ -28,7 +28,7 @@ fD_{\max}\min\{a^{r_i},\,1-(1-a)^{r_i}\}
 fD_{\max}\max\{a^{r_i},\,1-(1-a)^{r_i}\}.
 $$
 
-Both endpoints are attained in the measurable, depth-bounded class; histories need not satisfy realistic ascent/descent-rate constraints.
+These are the best possible infimum and supremum over bounded measurable depth histories. Some endpoints require arbitrarily remote past exposure and are approached by finite-duration histories rather than attained by them. No realistic ascent/descent-rate constraint is imposed.
 
 ## Proof
 
