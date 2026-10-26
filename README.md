@@ -22,6 +22,8 @@ Manuscript author: **Christopher D. Long**.
 4. **Identifiability:** Can different compartment parameter sets induce the same rounded published table? What additional experiments or profiles distinguish them?
 5. **Predictive validation:** Does a reconstructed or refined model improve out-of-sample DCS prediction, without confusing table reproduction with physiological validation?
 
+For the **empirical origin of the RDP equation**, including the distinct early $C=510$ fit and the final shifted $C=803$ curve, see [DSAT empirical calibration and historical evidence](docs/EMPIRICAL_CALIBRATION.md).
+
 ## Model inventory
 
 | Family | Status | Next step |
