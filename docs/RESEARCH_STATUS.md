@@ -18,7 +18,7 @@ Updated: 2026-10-25.
 - The March 2026 DSAT reconstruction manuscript and Python planner. The working code uses a deliberately chosen implementation of pressure groups and residual nitrogen time; not all historical quantization rules were printed explicitly.
 - Disagreement between 1994 fitted curve and direct-ascent Table III diagnostic is documented, **not** resolved by equating them.
 - Surface-interval off-gassing conventions, metric depth presentation, complete multilevel table generation, and detailed operational overlays need comparison against the original publication and actual table printings.
-- An older manuscript uses inconsistent fitted-curve constants and should not be cited as the corrected DSAT specification; it is in the archival source directory.
+- The archived earlier manuscript reports $C=510$, $x=0.53$, which are documented **intermediate** empirical-fit coefficients, not merely incorrect constants. The later shifted curve has $A=20.15$, $C=803$, $x=0.7476$. See [empirical calibration chronology](EMPIRICAL_CALIBRATION.md).
 - A legacy Python diagnostic mixes a Bühlmann-style water-vapor correction with DSAT M-values. It remains available for historical provenance, not as the canonical DSAT convention.
 
 ## Open / not claimed
